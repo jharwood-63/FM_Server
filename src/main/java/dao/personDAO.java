@@ -1,6 +1,7 @@
 package dao;
 
 import model.Person;
+
 import java.sql.*;
 
 /**
@@ -24,7 +25,7 @@ public class personDAO {
      * @param person A person object that will be inserted into the database
      */
 
-    private void insertPerson(Person person) {
+    private void insertPerson(Person person) throws DataAccessException{
         String sql = "INSERT INTO person (personID, AssociatedUsername, firstName, lastName, gender, " +
                 "fatherID, motherID, spouseID) VALUES(?,?,?,?,?,?,?,?)";
 
