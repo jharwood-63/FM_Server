@@ -1,34 +1,51 @@
 package dao;
 
 import model.Person;
+import java.sql.*;
 
 /**
  * personDAO accesses data in the database
  */
 
 public class personDAO {
+    private final Connection conn;
+
     /**
-     * Default constructor for personDAO
+     * Constructor for personDAO initializes a connection to the database
+     * @param conn Connection to the database
      */
 
-    public personDAO() {
-
+    public personDAO(Connection conn) {
+        this.conn = conn;
     }
 
     /**
      * Insert a new row in the person table
-     * @param personID unique identifier for this person
-     * @param associatedUsername username of user to which this person belongs
-     * @param firstName person's first name
-     * @param lastName person's last name
-     * @param gender person's gender ("m" or "f")
-     * @param fatherID person ID of person's father
-     * @param motherID person ID of person's mother
-     * @param spouseID person ID of person's spouse
+     * @param person A person object that will be inserted into the database
      */
 
-    private void insertPerson(String personID, String associatedUsername, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID){
+    private void insertPerson(Person person) {
+        String sql = "INSERT INTO person (personID, AssociatedUsername, firstName, lastName, gender, " +
+                "fatherID, motherID, spouseID) VALUES(?,?,?,?,?,?,?,?)";
 
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            //Using the statements built-in set(type) functions we can pick the question mark we want
+            //to fill in and give it a proper value. The first argument corresponds to the first
+            //question mark found in our sql String
+            stmt.setString(1, person.getPersonID());
+            stmt.setString(2, person.getAssociatedUsername());
+            stmt.setString(3, person.getFirstName());
+            stmt.setString(4, person.getLastName());
+            stmt.setString(5, person.getGender());
+            stmt.setString(6, person.getFatherID());
+            stmt.setString(7, person.getMotherID());
+            stmt.setString(8, person.getSpouseID());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while inserting an event into the database");
+        }
     }
 
     /**
