@@ -55,11 +55,10 @@ public class Person {
         }
 
         Person compPerson = (Person)o;
-        //FIXME: null is weird
+
         if (!hasSameComponents(compPerson)) {
             return false;
         }
-
 
         return true;
     }
@@ -69,7 +68,6 @@ public class Person {
         boolean isNullMother = checkIDs(compPerson.getMotherID(), this.motherID);
         boolean isNullSpouse = checkIDs(compPerson.getSpouseID(), this.spouseID);
         // father
-        //FIXME: You need to think about this a lot more
         if (isNullFather && !isNullMother && !isNullSpouse) {
             if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
                     !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
@@ -114,7 +112,7 @@ public class Person {
                     !compPerson.getGender().equals(this.gender) || !compPerson.getFatherID().equals(this.fatherID)) {
                 return false;
             }
-        }
+        } // father mother spouse
         else if (isNullFather && isNullMother && isNullSpouse) {
             if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
                     !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
