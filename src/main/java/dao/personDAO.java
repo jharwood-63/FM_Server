@@ -60,12 +60,14 @@ public class personDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, personID);
             rs = stmt.executeQuery();
+
             if (rs.next()) {
                 person = new Person(rs.getString("personID"), rs.getString("AssociatedUsername"),
                         rs.getString("firstName"), rs.getString("lastName"), rs.getString("gender"),
                         rs.getString("fatherID"), rs.getString("motherID"), rs.getString("spouseID"));
                 return person;
-            } else {
+            }
+            else {
                 return null;
             }
         }

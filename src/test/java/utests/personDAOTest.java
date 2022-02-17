@@ -69,12 +69,11 @@ public class personDAOTest {
     @DisplayName("Positive Find Test")
     public void positiveFindTest() throws DataAccessException {
         try {
-            assertEquals(null, pDAO.find("12345"));
-
             pDAO.insertPerson(personNormal);
+            pDAO.insertPerson(personNullIDs);
 
             assertEquals(personNormal, pDAO.find(personNormal.getPersonID()));
-            assertEquals(null, pDAO.find("12345"));
+            assertEquals(personNullIDs, pDAO.find(personNullIDs.getPersonID()));
         }
         catch (DataAccessException e) {
             e.printStackTrace();
@@ -84,8 +83,19 @@ public class personDAOTest {
 
     @Test
     @DisplayName("Negative Find Test")
-    public void negativeFindTest() {
-        //FIXME: not sure what to do here
+    public void negativeFindTest() throws DataAccessException {
+        try {
+            assertEquals(null, pDAO.find("yourmom"));
+
+            pDAO.insertPerson(personNormal);
+            pDAO.clearPerson();
+
+            assertEquals(null, pDAO.find(personNormal.getPersonID()));
+        }
+        catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered trying to find a person in the database");
+        }
     }
 
     @Test

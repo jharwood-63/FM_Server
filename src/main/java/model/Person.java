@@ -56,17 +56,34 @@ public class Person {
 
         Person compPerson = (Person)o;
 
-        if (!hasSameComponents(compPerson)) {
+        //tells you if any of the compPerson ids mismatch null or not null with this ids
+        if (!checkIDs(compPerson)) {
+            return false;
+        }
+
+        if (!hasSameComponentsMinusIDs(compPerson)) {
             return false;
         }
 
         return true;
     }
 
-    private boolean hasSameComponents(Person compPerson) {
+    private boolean hasSameComponentsMinusIDs(Person compPerson) {
         if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) || !compPerson.firstName.equals(this.firstName) ||
-                !compPerson.getLastName().equals(this.lastName) || !compPerson.getGender().equals(this.gender) || !compPerson.getFatherID().equals(this.fatherID) ||!compPerson.getMotherID().equals(this.motherID) ||
-                !compPerson.getSpouseID().equals(this.spouseID)) {
+                !compPerson.getLastName().equals(this.lastName) || !compPerson.getGender().equals(this.gender)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean checkIDs(Person compPerson) {
+        if ((compPerson.getFatherID() == null && this.fatherID != null) || (compPerson.getMotherID() == null && this.motherID != null) ||
+                (compPerson.getSpouseID() == null && this.spouseID != null)) {
+            return false;
+        }
+        else if ((compPerson.getFatherID() != null && this.fatherID == null) || (compPerson.getMotherID() != null && this.motherID == null) ||
+                (compPerson.getSpouseID() != null && this.spouseID == null)) {
             return false;
         }
 

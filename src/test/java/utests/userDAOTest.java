@@ -62,16 +62,50 @@ public class userDAOTest {
     @DisplayName("Positive Find Test")
     public void positiveFindTest() throws DataAccessException {
         try {
-            assertEquals(null, uDAO.find("yourmom"));
-
             uDAO.insertUser(userNormal1);
+            uDAO.insertUser(userNormal2);
 
             assertEquals(userNormal1, uDAO.find(userNormal1.getUsername()));
-            assertEquals(null, uDAO.find("yourmom"));
+            assertEquals(userNormal2, uDAO.find(userNormal2.getUsername()));
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             throw new DataAccessException("Error accessing data in the database");
+        }
+    }
+
+    @Test
+    @DisplayName("Negative Find Test")
+    public void negativeFindTest() throws DataAccessException {
+        try {
+            assertEquals(null, uDAO.find("yourmom"));
+
+            uDAO.insertUser(userNormal1);
+            uDAO.clearUser();
+
+            assertEquals(null, uDAO.find(userNormal1.getUsername()));
+        }
+        catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered trying to find a user in the database");
+        }
+    }
+
+    @Test
+    @DisplayName("Clear user Test")
+    public void clearTest() throws DataAccessException {
+        try {
+            uDAO.insertUser(userNormal1);
+            uDAO.insertUser(userNormal2);
+
+            uDAO.clearUser();
+
+            assertEquals(null, uDAO.find(userNormal1.getUsername()));
+            assertEquals(null, uDAO.find(userNormal2.getUsername()));
+        }
+        catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while testing user clear");
         }
     }
 }
