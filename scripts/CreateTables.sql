@@ -18,10 +18,10 @@ CREATE TABLE user
 CREATE TABLE person
 (
 	personID varchar(255) NOT NULL PRIMARY KEY,
-	associatedUsername varchar(255),
+	associatedUsername varchar(255) NOT NULL,
 	firstName varchar(255) NOT NULL,
 	lastName varchar(255) NOT NULL,
-	gender char(1) NOT NULL,
+	gender CHAR(1) NOT NULL,
 	fatherID varchar(255) NULL,
 	motherID varchar(255) NULL,
 	spouseID varchar(255) NULL,

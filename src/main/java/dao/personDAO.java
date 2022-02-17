@@ -76,11 +76,18 @@ public class personDAO {
     }
 
     /**
-     * Deletes the row of the specified personID
-     * @param personID the personID of the person that needs to be deleted
+     * Clears the person table in the database
      */
 
-    public void deletePerson(String personID) {
+    public void clearPerson() throws DataAccessException {
+        String sql = "DELETE FROM person";
 
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while clearing the person table");
+        }
     }
 }
