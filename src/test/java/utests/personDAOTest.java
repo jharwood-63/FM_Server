@@ -4,13 +4,12 @@ import dao.DataAccessException;
 import dao.DatabaseManager;
 import dao.personDAO;
 import model.Person;
+
 import org.junit.jupiter.api.*;
-
 import java.sql.Connection;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DAOTest {
+public class personDAOTest {
     private Connection conn;
     private DatabaseManager manager;
     private personDAO pDAO;
@@ -29,7 +28,7 @@ public class DAOTest {
 
     @Test
     @DisplayName ("Positive Insert Test")
-    public void personPInsertTest() {
+    public void positiveInsertTest() {
         Person  testPerson1 = new Person("abcdefg","jharwood",
                 "Jackson", "Harwood", "m", "12345",
                 "67890", "hijkl");
@@ -39,12 +38,11 @@ public class DAOTest {
 
         assertDoesNotThrow(()->{pDAO.insertPerson(testPerson1);});
         assertDoesNotThrow(()->{pDAO.insertPerson(testPerson2);});
-
     }
 
     @Test
     @DisplayName("Negative Insert Test")
-    public void personNInsertTest() throws DataAccessException{
+    public void negativeInsertTest() throws DataAccessException{
         Person  testPerson1 = new Person("abcdefg",null,
                 "Jackson", "Harwood", "m", "12345",
                 "67890", "hijkl");
@@ -60,7 +58,7 @@ public class DAOTest {
 
     @Test
     @DisplayName("Positive Find Test")
-    public void personPFindTest() throws DataAccessException {
+    public void positiveFindTest() throws DataAccessException {
         Person  testPerson = new Person("abcdefg","jharwood",
                 "Jackson", "Harwood", "m", "12345",
                 "67890", "hijkl");
@@ -80,13 +78,13 @@ public class DAOTest {
 
     @Test
     @DisplayName("Negative Find Test")
-    public void personNFindTest() {
+    public void negativeFindTest() {
         //FIXME: not sure what to do here
     }
 
     @Test
     @DisplayName("Clear person Test")
-    public void personClearTest() throws DataAccessException {
+    public void clearTest() throws DataAccessException {
         Person  testPerson1 = new Person("abcdefg","jharwood",
                 "Jackson", "Harwood", "m", "12345",
                 "67890", "hijkl");
