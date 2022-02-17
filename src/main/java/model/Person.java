@@ -56,9 +56,17 @@ public class Person {
 
         Person compPerson = (Person)o;
 
-        if (!compPerson.personID.equals(this.personID) || !compPerson.associatedUsername.equals(this.associatedUsername) || !compPerson.firstName.equals(this.firstName) ||
-            !compPerson.lastName.equals(this.lastName) || !compPerson.gender.equals(this.gender) || !compPerson.fatherID.equals(this.fatherID) ||!compPerson.motherID.equals(this.motherID) ||
-            !compPerson.spouseID.equals(this.spouseID)) {
+        if (!hasSameComponents(compPerson)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean hasSameComponents(Person compPerson) {
+        if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) || !compPerson.firstName.equals(this.firstName) ||
+                !compPerson.getLastName().equals(this.lastName) || !compPerson.getGender().equals(this.gender) || !compPerson.getFatherID().equals(this.fatherID) ||!compPerson.getMotherID().equals(this.motherID) ||
+                !compPerson.getSpouseID().equals(this.spouseID)) {
             return false;
         }
 

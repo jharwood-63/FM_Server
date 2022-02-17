@@ -7,18 +7,41 @@ import model.Person;
 
 import org.junit.jupiter.api.*;
 import java.sql.Connection;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class personDAOTest {
     private Connection conn;
     private DatabaseManager manager;
     private personDAO pDAO;
+    Person personNormal;
+    Person personNullIDs;
+    Person personNullUsername;
 
     @BeforeEach
     public void setUp() throws DataAccessException {
         this.manager = new DatabaseManager();
         this.conn = manager.getConnection();
         this.pDAO = new personDAO(this.conn);
+
+        String personID1 = UUID.randomUUID().toString();
+        String personID2 = UUID.randomUUID().toString();
+        String personID3 = UUID.randomUUID().toString();
+
+        String fatherID = UUID.randomUUID().toString();
+        String motherID = UUID.randomUUID().toString();
+        String spouseID = UUID.randomUUID().toString();
+
+        this.personNormal = new Person(personID1,"jharwood",
+                "Jackson", "Harwood", "m", fatherID,
+                motherID, spouseID);
+        this.personNullIDs = new Person(personID2,"jharwood",
+                "Jackson", "Harwood", "m", null,
+                null, null);
+        this.personNullUsername = new Person(personID3,null,
+                "Jackson", "Harwood", "m", fatherID,
+                motherID, spouseID);
     }
 
     @AfterEach
@@ -29,45 +52,28 @@ public class personDAOTest {
     @Test
     @DisplayName ("Positive Insert Test")
     public void positiveInsertTest() {
-        Person  testPerson1 = new Person("abcdefg","jharwood",
-                "Jackson", "Harwood", "m", "12345",
-                "67890", "hijkl");
-        Person  testPerson2 = new Person("yourmom","jharwood",
-                "Jackson", "Harwood", "m", "",
-                "", "");
-
-        assertDoesNotThrow(()->{pDAO.insertPerson(testPerson1);});
-        assertDoesNotThrow(()->{pDAO.insertPerson(testPerson2);});
+        assertDoesNotThrow(()->{pDAO.insertPerson(personNormal);});
+        assertDoesNotThrow(()->{pDAO.insertPerson(personNullIDs);});
     }
 
     @Test
     @DisplayName("Negative Insert Test")
     public void negativeInsertTest() throws DataAccessException{
-        Person  testPerson1 = new Person("abcdefg",null,
-                "Jackson", "Harwood", "m", "12345",
-                "67890", "hijkl");
-        Person  testPerson2 = new Person("yourmom","jharwood",
-                "Jackson", "Harwood", "m", "",
-                "", "");
+        pDAO.insertPerson(personNullIDs);
 
-        pDAO.insertPerson(testPerson2);
-
-        assertThrows(DataAccessException.class, ()->{pDAO.insertPerson(testPerson1);});
-        assertThrows(DataAccessException.class, ()->{pDAO.insertPerson(testPerson2);});
+        assertThrows(DataAccessException.class, ()->{pDAO.insertPerson(personNullUsername);});
+        assertThrows(DataAccessException.class, ()->{pDAO.insertPerson(personNullIDs);});
     }
 
     @Test
     @DisplayName("Positive Find Test")
     public void positiveFindTest() throws DataAccessException {
-        Person  testPerson = new Person("abcdefg","jharwood",
-                "Jackson", "Harwood", "m", "12345",
-                "67890", "hijkl");
         try {
             assertEquals(null, pDAO.find("12345"));
 
-            pDAO.insertPerson(testPerson);
+            pDAO.insertPerson(personNormal);
 
-            assertEquals(testPerson, pDAO.find(testPerson.getPersonID()));
+            assertEquals(personNormal, pDAO.find(personNormal.getPersonID()));
             assertEquals(null, pDAO.find("12345"));
         }
         catch (DataAccessException e) {
@@ -85,21 +91,14 @@ public class personDAOTest {
     @Test
     @DisplayName("Clear person Test")
     public void clearTest() throws DataAccessException {
-        Person  testPerson1 = new Person("abcdefg","jharwood",
-                "Jackson", "Harwood", "m", "12345",
-                "67890", "hijkl");
-        Person  testPerson2 = new Person("yourmom","jharwood",
-                "Jackson", "Harwood", "m", "",
-                "", "");
-
         try {
-            pDAO.insertPerson(testPerson1);
-            pDAO.insertPerson(testPerson2);
+            pDAO.insertPerson(personNormal);
+            pDAO.insertPerson(personNullIDs);
 
             pDAO.clearPerson();
 
-            assertEquals(null, pDAO.find(testPerson1.getPersonID()));
-            assertEquals(null, pDAO.find(testPerson2.getPersonID()));
+            assertEquals(null, pDAO.find(personNormal.getPersonID()));
+            assertEquals(null, pDAO.find(personNullIDs.getPersonID()));
         }
         catch (DataAccessException e) {
             e.printStackTrace();

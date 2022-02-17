@@ -37,6 +37,40 @@ public class User {
         this.personID = personID;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (o == this) {
+            return true;
+        }
+
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        User compUser = (User)o;
+
+        if (!hasSameComponents(compUser)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean hasSameComponents(User compUser) {
+        if (!compUser.getUsername().equals(this.username) || !compUser.getPassword().equals(this.password) ||
+                !compUser.getEmail().equals(this.email) || !compUser.getFirstName().equals(this.firstName) ||
+                !compUser.getLastName().equals(this.lastName) || !compUser.getGender().equals(this.gender) ||
+                !compUser.getPersonID().equals(this.personID)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public String getUsername() {
         return username;
     }
