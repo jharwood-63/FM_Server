@@ -1,7 +1,7 @@
 package dao;
 
 public class DataAccessException extends Exception {
-    DataAccessException(String message) {
+    public DataAccessException(String message) {
         super(message);
     }
 }
