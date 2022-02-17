@@ -55,39 +55,99 @@ public class Person {
         }
 
         Person compPerson = (Person)o;
-
-        //tells you if any of the compPerson ids mismatch null or not null with this ids
-        if (!checkIDs(compPerson)) {
+        //FIXME: null is weird
+        if (!hasSameComponents(compPerson)) {
             return false;
         }
 
-        if (!hasSameComponentsMinusIDs(compPerson)) {
-            return false;
+
+        return true;
+    }
+
+    private boolean hasSameComponents(Person compPerson) {
+        boolean isNullFather = checkIDs(compPerson.getFatherID(), this.fatherID);
+        boolean isNullMother = checkIDs(compPerson.getMotherID(), this.motherID);
+        boolean isNullSpouse = checkIDs(compPerson.getSpouseID(), this.spouseID);
+        // father
+        //FIXME: You need to think about this a lot more
+        if (isNullFather && !isNullMother && !isNullSpouse) {
+            if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
+                    !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
+                    !compPerson.getGender().equals(this.gender) || !compPerson.getMotherID().equals(this.motherID) ||
+                    !compPerson.getSpouseID().equals(this.spouseID)) {
+                return false;
+            }
+        } // mother
+        else if (isNullMother && !isNullFather && !isNullSpouse) {
+            if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
+                    !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
+                    !compPerson.getGender().equals(this.gender) || !compPerson.getFatherID().equals(this.fatherID) ||
+                    !compPerson.getSpouseID().equals(this.spouseID)) {
+                return false;
+            }
+        } // spouse
+        else if (isNullSpouse && !isNullFather && !isNullMother) {
+            if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
+                    !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
+                    !compPerson.getGender().equals(this.gender) || !compPerson.getMotherID().equals(this.motherID) ||
+                    !compPerson.getFatherID().equals(this.fatherID)) {
+                return false;
+            }
+        } // father mother
+        else if (isNullFather && isNullMother && !isNullSpouse) {
+            if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
+                    !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
+                    !compPerson.getGender().equals(this.gender) || !compPerson.getSpouseID().equals(this.spouseID)) {
+                return false;
+            }
+        } // father spouse
+        else if (isNullFather && isNullSpouse && !isNullMother) {
+            if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
+                    !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
+                    !compPerson.getGender().equals(this.gender) || !compPerson.getMotherID().equals(this.motherID)) {
+                return false;
+            }
+        } // mother spouse
+        else if (isNullMother && isNullSpouse && !isNullFather) {
+            if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
+                    !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
+                    !compPerson.getGender().equals(this.gender) || !compPerson.getFatherID().equals(this.fatherID)) {
+                return false;
+            }
+        }
+        else if (isNullFather && isNullMother && isNullSpouse) {
+            if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
+                    !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
+                    !compPerson.getGender().equals(this.gender)) {
+                return false;
+            }
+        }
+        // none
+        else {
+            if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
+                    !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
+                    !compPerson.getGender().equals(this.gender) || !compPerson.getFatherID().equals(this.fatherID) || !compPerson.getMotherID().equals(this.motherID) ||
+                    !compPerson.getSpouseID().equals(this.spouseID)) {
+                return false;
+            }
         }
 
         return true;
     }
 
-    private boolean hasSameComponentsMinusIDs(Person compPerson) {
-        if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) || !compPerson.firstName.equals(this.firstName) ||
-                !compPerson.getLastName().equals(this.lastName) || !compPerson.getGender().equals(this.gender)) {
-            return false;
+    /**
+     * Check if the ids are null
+     * @param compID A Spouse, Father, or Mother ID of the object being compared to this
+     * @param thisID A Spouse, Father, or Mother ID of this object
+     * @return Returns true if both parameters are null
+     */
+
+    private boolean checkIDs(String compID, String thisID) {
+        if (compID == null && thisID == null) {
+            return true;
         }
 
-        return true;
-    }
-
-    private boolean checkIDs(Person compPerson) {
-        if ((compPerson.getFatherID() == null && this.fatherID != null) || (compPerson.getMotherID() == null && this.motherID != null) ||
-                (compPerson.getSpouseID() == null && this.spouseID != null)) {
-            return false;
-        }
-        else if ((compPerson.getFatherID() != null && this.fatherID == null) || (compPerson.getMotherID() != null && this.motherID == null) ||
-                (compPerson.getSpouseID() != null && this.spouseID == null)) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     public String getPersonID() {
