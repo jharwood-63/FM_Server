@@ -25,8 +25,7 @@ public class personDAO {
      * @param person A person object that will be inserted into the database
      */
 
-    public boolean insertPerson(Person person) throws DataAccessException {
-        boolean added = false;
+    public void insertPerson(Person person) throws DataAccessException {
         String sql = "INSERT INTO person (personID, AssociatedUsername, firstName, lastName, gender, " +
                 "fatherID, motherID, spouseID) VALUES(?,?,?,?,?,?,?,?)";
 
@@ -41,14 +40,39 @@ public class personDAO {
             stmt.setString(8, person.getSpouseID());
 
             stmt.executeUpdate();
-
-            added = true;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DataAccessException("Error encountered while inserting an event into the database");
         }
+    }
 
-        return added;
+    /**
+     * Finds the person connected with the given personID
+     * @param personID Unique identifier for the person
+     * @return Person object
+     */
+
+    public Person find(String personID) throws DataAccessException {
+        Person person;
+        ResultSet rs;
+        String sql = "SELECT * FROM person WHERE personID = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, personID);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                person = new Person(rs.getString("personID"), rs.getString("AssociatedUsername"),
+                        rs.getString("firstName"), rs.getString("lastName"), rs.getString("gender"),
+                        rs.getString("fatherID"), rs.getString("motherID"), rs.getString("spouseID"));
+                return person;
+            } else {
+                return null;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding a person in the database");
+        }
     }
 
     /**
@@ -58,16 +82,5 @@ public class personDAO {
 
     public void deletePerson(String personID) {
 
-    }
-
-    /**
-     * Finds the person connected with the given personID
-     * @param personID Unique identifier for the person
-     * @return Person object
-     */
-
-    public Person find(String personID) {
-
-        return null;
     }
 }

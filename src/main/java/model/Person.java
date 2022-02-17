@@ -40,6 +40,31 @@ public class Person {
         this.spouseID = spouseID;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (o == this) {
+            return true;
+        }
+
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Person compPerson = (Person)o;
+
+        if (!compPerson.personID.equals(this.personID) || !compPerson.associatedUsername.equals(this.associatedUsername) || !compPerson.firstName.equals(this.firstName) ||
+            !compPerson.lastName.equals(this.lastName) || !compPerson.gender.equals(this.gender) || !compPerson.fatherID.equals(this.fatherID) ||!compPerson.motherID.equals(this.motherID) ||
+            !compPerson.spouseID.equals(this.spouseID)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public String getPersonID() {
         return personID;
     }
