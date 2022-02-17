@@ -67,7 +67,6 @@ public class DAOTest {
             e.printStackTrace();
             throw new DataAccessException("Error accessing data in the database");
         }
-
     }
 
 }
