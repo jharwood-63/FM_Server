@@ -51,9 +51,18 @@ public class personDAOTest {
 
     @Test
     @DisplayName ("Positive Insert Test")
-    public void positiveInsertTest() {
-        assertDoesNotThrow(()->{pDAO.insertPerson(personNormal);});
-        assertDoesNotThrow(()->{pDAO.insertPerson(personNullIDs);});
+    public void positiveInsertTest() throws DataAccessException {
+        try {
+            pDAO.insertPerson(personNormal);
+            pDAO.insertPerson(personNullIDs);
+
+            assertEquals(personNormal, pDAO.find(personNormal.getPersonID()));
+            assertEquals(personNullIDs, pDAO.find(personNullIDs.getPersonID()));
+        }
+        catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered trying to insert a person into the database");
+        }
     }
 
     @Test

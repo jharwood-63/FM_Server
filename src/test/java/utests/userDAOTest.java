@@ -44,9 +44,18 @@ public class userDAOTest {
 
     @Test
     @DisplayName ("Positive Insert Test")
-    public void positiveInsertTest() {
-        assertDoesNotThrow(()->{uDAO.insertUser(userNormal1);});
-        assertDoesNotThrow(()->{uDAO.insertUser(userNormal2);});
+    public void positiveInsertTest() throws DataAccessException {
+        try {
+            uDAO.insertUser(userNormal1);
+            uDAO.insertUser(userNormal2);
+
+            assertEquals(userNormal1, uDAO.find(userNormal1.getUsername()));
+            assertEquals(userNormal2, uDAO.find(userNormal2.getUsername()));
+        }
+        catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered trying to insert a user into the database");
+        }
     }
 
     @Test
