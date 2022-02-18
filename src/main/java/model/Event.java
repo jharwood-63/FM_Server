@@ -45,6 +45,40 @@ public class Event {
         this.year = year;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (o == this) {
+            return true;
+        }
+
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Event compEvent = (Event)o;
+
+        if (!hasSameComponents(compEvent)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean hasSameComponents(Event compEvent) {
+        if (!compEvent.getEventID().equals(this.eventID) || !compEvent.getAssociatedUsername().equals(this.associatedUsername) ||
+            !compEvent.getPersonID().equals(this.personID) || compEvent.getLatitude() != this.latitude || compEvent.getLongitude() != this.longitude ||
+            !compEvent.getCountry().equals(this.country) || !compEvent.getCity().equals(this.city) || !compEvent.getEventType().equals(this.eventType) ||
+            compEvent.getYear() != this.year) {
+            return false;
+        }
+
+        return true;
+    }
+
     public String getEventID() {
         return eventID;
     }

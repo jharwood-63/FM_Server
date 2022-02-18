@@ -22,6 +22,29 @@ public class AuthToken {
         this.username = username;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (o == this) {
+            return true;
+        }
+
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        AuthToken compAuthToken = (AuthToken)o;
+
+        if (!compAuthToken.getAuthToken().equals(this.authToken) || !compAuthToken.getUsername().equals(this.username)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public String getAuthToken() {
         return authToken;
     }
