@@ -40,7 +40,8 @@ public class userDAO {
             stmt.setString(7, user.getPersonID());
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             throw new DataAccessException("Error encountered while inserting an event into the database");
         }

@@ -2,42 +2,52 @@ package dao;
 
 import model.Event;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * EventDAO accesses data in the database
  */
 
 public class eventDAO {
+    private final Connection conn;
+
     /**
-     * Default constructor for eventDAO
+     * Initializes a connection to the database
+     * @param conn Connection to the database
      */
 
-    public eventDAO() {
-
+    public eventDAO(Connection conn) {
+        this.conn = conn;
     }
+
     /**
      * Inserts a new row in the event table
-     * @param eventID Unique identifier for this event
-     * @param associatedUsername Username of user to which this event belongs
-     * @param personID ID of person to which this event belongs
-     * @param latitude Latitude of event's location
-     * @param longitude Longitude of event's location
-     * @param country Country in which event occurred
-     * @param city City in which event occurred
-     * @param eventType Type of event
-     * @param year Year in which event occurred
+     * @param event Event object that will be inserted into the database
      */
 
-    public void insertEvent(String eventID, String associatedUsername, String personID, double latitude, double longitude, String country, String city, String eventType, int year) {
+    public void insertEvent(Event event) throws DataAccessException {
+        String sql = "INSERT INTO event (eventID, associatedUsername, personID, latitude, longitude, " +
+                "country, city, eventType, year) VALUES(?,?,?,?,?,?,?,?,?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, event.getEventID());
+            stmt.setString(2, event.getAssociatedUsername());
+            stmt.setString(3, event.getPersonID());
+            stmt.setFloat(4, event.getLatitude());
+            stmt.setFloat(5, event.getLongitude());
+            stmt.setString(6, event.getCountry());
+            stmt.setString(7, event.getCity());
+            stmt.setString(8, event.getEventType());
+            stmt.setInt(9, event.getYear());
 
-    }
-
-    /**
-     * Deletes the row of the even with the specified eventID
-     * @param eventID The eventID of the even that will be deleted
-     */
-
-    public void deleteEvent(String eventID) {
-
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while inserting an event into the database");
+        }
     }
 
     /**
@@ -46,8 +56,41 @@ public class eventDAO {
      * @return Event object
      */
 
-    public Event findEvent(String eventID) {
+    public Event findEvent(String eventID) throws DataAccessException {
+        Event event;
+        ResultSet rs;
+        String sql = "SELECT * FROM event WHERE eventID = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, eventID);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                event = new Event(rs.getString("eventID"), rs.getString("associatedUsername"),
+                        rs.getString("personID"), rs.getFloat("latitude"), rs.getFloat("longitude"),
+                        rs.getString("country"), rs.getString("city"), rs.getString("eventType"),
+                        rs.getInt("year"));
+                return event;
+            } else {
+                return null;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding an event in the database");
+        }
+    }
 
-        return null;
+    /**
+     * Clears the event table in the database
+     */
+
+    public void clearEvent() throws DataAccessException{
+        String sql = "DELETE FROM event";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while clearing the event table");
+        }
     }
 }

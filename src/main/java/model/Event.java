@@ -13,8 +13,8 @@ public class Event {
     private String eventID;
     private String associatedUsername;
     private String personID;
-    private double latitude;
-    private double longitude;
+    private float latitude;
+    private float longitude;
     private String country;
     private String city;
     private String eventType;
@@ -33,7 +33,7 @@ public class Event {
      * @param year Year in which event occurred
      */
 
-    public Event(String eventID, String associatedUsername, String personID, double latitude, double longitude, String country, String city, String eventType, int year) {
+    public Event(String eventID, String associatedUsername, String personID, float latitude, float longitude, String country, String city, String eventType, int year) {
         this.eventID = eventID;
         this.associatedUsername = associatedUsername;
         this.personID = personID;
@@ -69,19 +69,19 @@ public class Event {
         this.personID = personID;
     }
 
-    public double getLatitude() {
+    public float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(float latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(float longitude) {
         this.longitude = longitude;
     }
 
