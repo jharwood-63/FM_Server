@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import com.sun.net.httpserver.*;
 import handlers.FileRequestHandler;
+import handlers.RegisterHandler;
 
 public class FamilyMapServer {
     private static final int MAX_WAITING_CONNECTIONS = 12;
@@ -36,5 +37,6 @@ public class FamilyMapServer {
         System.out.println("Creating contexts");
 
         server.createContext("/", new FileRequestHandler());
+        server.createContext("/user/register", new RegisterHandler());
     }
 }
