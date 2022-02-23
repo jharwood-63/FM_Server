@@ -17,6 +17,17 @@ public class Person {
     private String motherID;
     private String spouseID;
 
+    public Person() {
+        personID = "";
+        associatedUsername = "";
+        firstName = "";
+        lastName = "";
+        gender = "";
+        fatherID = "";
+        motherID = "";
+        spouseID = "";
+    }
+
     /**
      * Constructor for creating a Person object
      * @param personID Unique identifier for this person

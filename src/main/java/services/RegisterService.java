@@ -32,6 +32,7 @@ public class RegisterService {
             eventDAO eventDAO = new eventDAO(conn);
 
             userDAO.insertUser(createUser(registerRequest));
+            //create 4 generations
 
             //close the connection after dao operations are done
             manager.closeConnection(true);
