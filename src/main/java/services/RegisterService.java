@@ -33,6 +33,7 @@ public class RegisterService {
 
             userDAO.insertUser(createUser(registerRequest));
             //create 4 generations
+            //change the personID of the person returned to the personID of the user
 
             //close the connection after dao operations are done
             manager.closeConnection(true);
