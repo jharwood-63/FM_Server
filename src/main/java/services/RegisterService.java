@@ -1,10 +1,7 @@
 package services;
 
 import dao.*;
-import model.AuthToken;
-import model.FamilyTree;
-import model.Person;
-import model.User;
+import model.*;
 import services.requests.RegisterRequest;
 import services.response.RegisterResponse;
 import services.response.Response;
@@ -17,7 +14,11 @@ import java.util.UUID;
  * Returns a response containing the authtoken of the new user
  */
 
-public class RegisterService extends Service {
+public class RegisterService {
+    public RegisterService() {
+
+    }
+
     /**
      * Creates a new user account
      * Generates 4 generations of ancestor data for the new user

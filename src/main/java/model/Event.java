@@ -20,6 +20,10 @@ public class Event {
     private String eventType;
     private int year;
 
+    public Event() {
+
+    }
+
     /**
      * Constructor for creating an Event object
      * @param eventID Unique identifier for this event

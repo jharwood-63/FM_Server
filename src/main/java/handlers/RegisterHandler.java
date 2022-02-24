@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpHandler;
 import dao.DatabaseManager;
 import dao.authTokenDAO;
 import services.RegisterService;
+import services.Service;
 import services.requests.RegisterRequest;
 import services.response.Response;
 

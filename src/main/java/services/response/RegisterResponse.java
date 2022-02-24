@@ -1,5 +1,7 @@
 package services.response;
 
+import services.RegisterService;
+
 /**
  * RegisterResponse holds the data and success status returned after a register is performed
  */
@@ -24,6 +26,10 @@ public class RegisterResponse extends Response{
         this.username = username;
         this.personID = personID;
         this.success = success;
+    }
+
+    public RegisterResponse() {
+
     }
 
     public String getAuthToken() {

@@ -29,6 +29,10 @@ public class Data {
         this.locationData = locationData;
     }
 
+    public int getLocationDataLength() {
+        return locationData.getData().length;
+    }
+
     public NameData getfNames() {
         return fNames;
     }
