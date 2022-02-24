@@ -1,9 +1,13 @@
 package services;
 
 import dao.*;
+import model.AuthToken;
+import model.FamilyTree;
+import model.Person;
 import model.User;
 import services.requests.RegisterRequest;
 import services.response.RegisterResponse;
+import services.response.Response;
 
 import java.sql.Connection;
 import java.util.UUID;
@@ -19,33 +23,41 @@ public class RegisterService {
      * Generates 4 generations of ancestor data for the new user
      * Logs in the user
      * @param registerRequest Object containing the new user data
-     * @return RegisterResponse, an object containing the authtoken
+     * @return Response, an object containing the authtoken
      */
 
-    public RegisterResponse register(RegisterRequest registerRequest) {
+    public Response register(RegisterRequest registerRequest) {
         DatabaseManager manager = new DatabaseManager();
 
         try {
             Connection conn = manager.getConnection();
             userDAO userDAO = new userDAO(conn);
             personDAO personDAO = new personDAO(conn);
-            eventDAO eventDAO = new eventDAO(conn);
+            authTokenDAO authTokenDAO = new authTokenDAO(conn);
+            FamilyTree familyTree = new FamilyTree();
 
-            userDAO.insertUser(createUser(registerRequest));
-            //create 4 generations
-            //change the personID of the person returned to the personID of the user
+            User user = createUser(registerRequest);
+            userDAO.insertUser(user);
+            //FIXME: create 4 generations with events
+            Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4);
+            resetPerson(person, user);
+            //FIXME: I dont know where to add the user to the database -> personDAO.insertPerson(person);
+
+            // Login user
+            String authTokenString = UUID.randomUUID().toString();
+            AuthToken authToken = new AuthToken(authTokenString, user.getUsername());
+            authTokenDAO.insertAuthToken(authToken);
 
             //close the connection after dao operations are done
             manager.closeConnection(true);
 
-            //create the response object
+            return new RegisterResponse(authTokenString, user.getUsername(), user.getPersonID(), true);
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             manager.closeConnection(false);
-            //return a response object with failure message
+            return new Response("Error: User was not registered", false);
         }
-        return null;
     }
 
     private User createUser(RegisterRequest registerRequest) {
@@ -55,5 +67,11 @@ public class RegisterService {
                 registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getGender(), personID);
 
         return  regUser;
+    }
+
+    private void resetPerson(Person person, User user) {
+        person.setPersonID(user.getPersonID());
+        person.setFirstName(user.getFirstName());
+        person.setLastName(user.getLastName());
     }
 }

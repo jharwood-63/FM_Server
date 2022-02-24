@@ -4,7 +4,7 @@ package services.response;
  * Holds the response data that will be returned with the result of the operation
  */
 
-public class LoadResponse {
+public class LoadResponse extends Response {
     private String message;
     private boolean success;
 

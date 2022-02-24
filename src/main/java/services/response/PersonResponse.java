@@ -7,7 +7,7 @@ import model.Person;
  * This is a response for both a single person request and an all persons request
  */
 
-public class PersonResponse {
+public class PersonResponse extends Response {
     private Person [] data;
 
     private String associatedUsername;

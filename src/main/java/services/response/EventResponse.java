@@ -6,7 +6,7 @@ import model.Event;
  * EventResponse holds the message and success status
  */
 
-public class EventResponse {
+public class EventResponse extends Response {
     private String associatedUsername;
     private String eventID;
     private String personID;

@@ -4,7 +4,7 @@ package services.response;
  * LoginResponse holds the data and success status returned after a login is performed
  */
 
-public class LoginResponse {
+public class LoginResponse extends Response {
     private String authtoken;
     private String username;
     private String personID;
