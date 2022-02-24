@@ -17,7 +17,7 @@ import java.util.UUID;
  * Returns a response containing the authtoken of the new user
  */
 
-public class RegisterService {
+public class RegisterService extends Service {
     /**
      * Creates a new user account
      * Generates 4 generations of ancestor data for the new user
@@ -38,7 +38,7 @@ public class RegisterService {
 
             User user = createUser(registerRequest);
             userDAO.insertUser(user);
-            //FIXME: create 4 generations with events
+            //FIXME: create 4 generations with events, probably needs to send the data object
             Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4);
             resetPerson(person, user);
             //FIXME: I dont know where to add the user to the database -> personDAO.insertPerson(person);

@@ -1,17 +1,17 @@
 package model;
 
 public class NameData {
-    private Name[] data;
+    private String[] data;
 
     public NameData() {
 
     }
 
-    public Name[] getData() {
+    public String[] getData() {
         return data;
     }
 
-    public void setData(Name[] data) {
+    public void setData(String[] data) {
         this.data = data;
     }
 }

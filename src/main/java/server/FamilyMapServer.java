@@ -5,9 +5,6 @@ import java.net.*;
 import com.sun.net.httpserver.*;
 import handlers.FileRequestHandler;
 import handlers.RegisterHandler;
-import model.Deserialize;
-import model.Location;
-import model.LocationData;
 
 public class FamilyMapServer {
     private static final int MAX_WAITING_CONNECTIONS = 12;
@@ -21,12 +18,9 @@ public class FamilyMapServer {
     private void run(int port) {
         System.out.println("Initializing HTTP Server");
         InetSocketAddress serverAddress = new InetSocketAddress(port);
-        Deserialize deserializer = new Deserialize();
-        LocationData locations;
 
         try {
             server = HttpServer.create(serverAddress, MAX_WAITING_CONNECTIONS);
-            locations = deserializer.deserializeLocation();
         }
         catch (IOException e) {
             e.printStackTrace();
