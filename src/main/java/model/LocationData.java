@@ -1,10 +1,14 @@
 package model;
 
 public class LocationData {
-    static Location[] data;
+    Location[] data;
+
+    public LocationData() {
+
+    }
 
     public LocationData(Location[] data) {
-        LocationData.data = data;
+        this.data = data;
     }
 
     public Location [] getData() {
@@ -12,6 +16,6 @@ public class LocationData {
     }
 
     public void setData(Location[] data) {
-        LocationData.data = data;
+        this.data = data;
     }
 }

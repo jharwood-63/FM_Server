@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class Deserialize {
-    public LocationData deserialize(String fileName) throws IOException {
+    //change this so that you only need one deserialize function
+    public LocationData deserializeLocation() throws IOException {
         Gson gson = new Gson();
-        try (Reader reader = new FileReader(fileName)){
+        try (Reader reader = new FileReader("json/locations.json")){
             LocationData locationData = (LocationData) gson.fromJson(reader, LocationData.class);
-
             return locationData;
         } catch (IOException e) {
             e.printStackTrace();

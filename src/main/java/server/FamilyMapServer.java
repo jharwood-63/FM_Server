@@ -26,7 +26,7 @@ public class FamilyMapServer {
 
         try {
             server = HttpServer.create(serverAddress, MAX_WAITING_CONNECTIONS);
-            //locations = deserializer.deserialize("json/locations.json");
+            locations = deserializer.deserializeLocation();
         }
         catch (IOException e) {
             e.printStackTrace();

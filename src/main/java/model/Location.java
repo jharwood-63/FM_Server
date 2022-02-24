@@ -1,47 +1,51 @@
 package model;
 
 public class Location {
-    static String country;
-    static String city;
-    static String latitude;
-    static String longitude;
+    String country;
+    String city;
+    String latitude;
+    String longitude;
+
+    public Location() {
+
+    }
 
     public Location(String country, String city, String latitude, String longitude) {
-        Location.country = country;
-        Location.city = city;
-        Location.latitude = latitude;
-        Location.longitude = longitude;
+        this.country = country;
+        this.city = city;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
-    public static String getLatitude() {
-        return latitude;
-    }
-
-    public static void setLatitude(String latitude) {
-        Location.latitude = latitude;
-    }
-
-    public static String getLongitude() {
-        return longitude;
-    }
-
-    public static void setLongitude(String longitude) {
-        Location.longitude = longitude;
-    }
-
-    public static String getCity() {
-        return city;
-    }
-
-    public static void setCity(String city) {
-        Location.city = city;
-    }
-
-    public static String getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    public static void setCountry(String country) {
-        Location.country = country;
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }
