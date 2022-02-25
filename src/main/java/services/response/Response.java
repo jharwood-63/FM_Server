@@ -1,6 +1,10 @@
 package services.response;
 
 public class Response {
+    /*
+    * The classes that inherit from response should not have a message or success variable
+    * and they should use these super constructors
+     */
     private String message;
     private boolean success;
 
@@ -9,9 +13,8 @@ public class Response {
         this.success = success;
     }
 
-    public Response() {
-        message = "";
-        success = false;
+    public Response(boolean success) {
+        this.success = success;
     }
 
     public String getMessage() {

@@ -4,7 +4,7 @@ package services.response;
  * ClearResponse object holds the data for the response to a ClearRequest
  */
 
-public class ClearResponse extends Response {
+public class ClearResponse {
     private String message;
     private boolean success;
 

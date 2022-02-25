@@ -50,7 +50,7 @@ public class personDAOTest {
 
     @AfterEach
     public void cleanUp() {
-        manager.closeConnection(false);
+        manager.closeConnection(true);
     }
 
     @Test
@@ -119,12 +119,23 @@ public class personDAOTest {
             pDAO.insertPerson(personNullIDs);
 
             pDAO.clearPerson();
-            //uDAO.clearUser();
-            //atDAO.clearAuthToken();
-            //eDAO.clearEvent();
 
             assertEquals(null, pDAO.find(personNormal.getPersonID()));
             assertEquals(null, pDAO.find(personNullIDs.getPersonID()));
+        }
+        catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while testing person clear");
+        }
+    }
+
+    @Test
+    public void clear() throws DataAccessException {
+        try {
+            pDAO.clearPerson();
+            uDAO.clearUser();
+            atDAO.clearAuthToken();
+            eDAO.clearEvent();
         }
         catch (DataAccessException e) {
             e.printStackTrace();

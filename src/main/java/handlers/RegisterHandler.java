@@ -1,19 +1,13 @@
 package handlers;
 
 import com.google.gson.*;
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import dao.DatabaseManager;
-import dao.authTokenDAO;
 import services.RegisterService;
-import services.Service;
 import services.requests.RegisterRequest;
 import services.response.Response;
-
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.sql.Connection;
 
 public class RegisterHandler implements HttpHandler {
     @Override
@@ -36,10 +30,10 @@ public class RegisterHandler implements HttpHandler {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
                 }
 
-                //FIXME: There is something wrong here
-                Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
-                gson.toJson(response, resBody);
-                resBody.close();
+                OutputStream respBody = exchange.getResponseBody();
+                String jsonResult = gson.toJson(response);
+                writeString(jsonResult, respBody);
+                respBody.close();
             }
         }
         catch (IOException e) {
@@ -47,5 +41,12 @@ public class RegisterHandler implements HttpHandler {
             throw new IOException("Error encountered trying to register a user");
         }
 
+    }
+
+    private void writeString(String str, OutputStream os) throws IOException {
+        OutputStreamWriter sw = new OutputStreamWriter(os);
+        BufferedWriter bw = new BufferedWriter(sw);
+        bw.write(str);
+        bw.flush();
     }
 }

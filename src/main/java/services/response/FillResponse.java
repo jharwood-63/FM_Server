@@ -4,7 +4,7 @@ package services.response;
  * FillResponse object holds data for a response to a fill operation
  */
 
-public class FillResponse extends Response {
+public class FillResponse {
     private String message;
     private boolean success;
 
