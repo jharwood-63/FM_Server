@@ -1,8 +1,6 @@
 package utests;
 
-import dao.DataAccessException;
-import dao.DatabaseManager;
-import dao.personDAO;
+import dao.*;
 import model.Person;
 
 import org.junit.jupiter.api.*;
@@ -15,6 +13,9 @@ public class personDAOTest {
     private Connection conn;
     private DatabaseManager manager;
     private personDAO pDAO;
+    private userDAO uDAO;
+    private authTokenDAO atDAO;
+    private eventDAO eDAO;
     Person personNormal;
     Person personNullIDs;
     Person personNullUsername;
@@ -24,6 +25,9 @@ public class personDAOTest {
         this.manager = new DatabaseManager();
         this.conn = manager.getConnection();
         this.pDAO = new personDAO(this.conn);
+        this.eDAO = new eventDAO(this.conn);
+        this.atDAO = new authTokenDAO(this.conn);
+        this.uDAO = new userDAO(this.conn);
 
         String personID1 = UUID.randomUUID().toString();
         String personID2 = UUID.randomUUID().toString();
@@ -115,6 +119,9 @@ public class personDAOTest {
             pDAO.insertPerson(personNullIDs);
 
             pDAO.clearPerson();
+            //uDAO.clearUser();
+            //atDAO.clearAuthToken();
+            //eDAO.clearEvent();
 
             assertEquals(null, pDAO.find(personNormal.getPersonID()));
             assertEquals(null, pDAO.find(personNullIDs.getPersonID()));

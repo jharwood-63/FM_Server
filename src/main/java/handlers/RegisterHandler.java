@@ -36,6 +36,7 @@ public class RegisterHandler implements HttpHandler {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
                 }
 
+                //FIXME: There is something wrong here
                 Writer resBody = new OutputStreamWriter(exchange.getResponseBody());
                 gson.toJson(response, resBody);
                 resBody.close();
