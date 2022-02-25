@@ -37,6 +37,10 @@ public class Data {
         return fNames;
     }
 
+    public int getFNameLength() {
+        return fNames.getData().length;
+    }
+
     public void setfNames(NameData fNames) {
         this.fNames = fNames;
     }
@@ -45,12 +49,20 @@ public class Data {
         return mNames;
     }
 
+    public int getMNameLength() {
+        return mNames.getData().length;
+    }
+
     public void setmNames(NameData mNames) {
         this.mNames = mNames;
     }
 
     public NameData getsNames() {
         return sNames;
+    }
+
+    public int getSNameLength() {
+        return sNames.getData().length;
     }
 
     public void setsNames(NameData sNames) {

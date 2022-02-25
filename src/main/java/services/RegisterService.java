@@ -7,6 +7,7 @@ import services.response.RegisterResponse;
 import services.response.Response;
 
 import java.sql.Connection;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -15,6 +16,9 @@ import java.util.UUID;
  */
 
 public class RegisterService {
+    private final static int LOW_BIRTH_YEAR = 1994;
+    private final static int HIGH_BIRTH_YEAR = 2006;
+
     public RegisterService() {
 
     }
@@ -35,14 +39,23 @@ public class RegisterService {
             userDAO userDAO = new userDAO(conn);
             personDAO personDAO = new personDAO(conn);
             authTokenDAO authTokenDAO = new authTokenDAO(conn);
+            eventDAO eventDAO = new eventDAO(conn);
             FamilyTree familyTree = new FamilyTree();
+            Random rand = new Random();
 
+            //Create user
             User user = createUser(registerRequest);
-            userDAO.insertUser(user);
-            //FIXME: create 4 generations with events, probably needs to send the data object
-            Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4);
+
+            //Create person
+            int birthYear = rand.nextInt(HIGH_BIRTH_YEAR - LOW_BIRTH_YEAR) + LOW_BIRTH_YEAR;
+            Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4, birthYear, personDAO, eventDAO);
+            //personDAO.deletePerson(person.getPersonID());
             resetPerson(person, user);
-            //FIXME: I dont know where to add the user to the database -> personDAO.insertPerson(person);
+            personDAO.insertPerson(person);
+
+            //sync user with person and insert person
+            user.setPersonID(person.getPersonID());
+            userDAO.insertUser(user);
 
             // Login user
             String authTokenString = UUID.randomUUID().toString();
@@ -62,16 +75,13 @@ public class RegisterService {
     }
 
     private User createUser(RegisterRequest registerRequest) {
-        String personID = UUID.randomUUID().toString();
-
         User regUser = new User(registerRequest.getUsername(), registerRequest.getPassword(), registerRequest.getEmail(),
-                registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getGender(), personID);
+                registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getGender(), "");
 
         return  regUser;
     }
 
     private void resetPerson(Person person, User user) {
-        person.setPersonID(user.getPersonID());
         person.setFirstName(user.getFirstName());
         person.setLastName(user.getLastName());
     }
