@@ -49,6 +49,9 @@ public class RegisterService {
             //Create person
             int birthYear = rand.nextInt(HIGH_BIRTH_YEAR - LOW_BIRTH_YEAR) + LOW_BIRTH_YEAR;
             Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4, birthYear, personDAO, eventDAO);
+            //FIXME: delete the death event for this user
+            Event deathEvent = eventDAO.findEvent(person.getPersonID(), "death");
+            eventDAO.deleteEvent(deathEvent.getEventID());
             resetPerson(person, user);
             personDAO.insertPerson(person);
 

@@ -95,9 +95,10 @@ public class personDAO {
     }
 
     public void deletePerson(String personID) throws DataAccessException {
-        String sql = "DELETE FROM person WHERE personID = ?";
+        String sql = "DELETE FROM person WHERE personID = ?;";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, personID);
             stmt.executeUpdate();
         }
         catch (SQLException e) {

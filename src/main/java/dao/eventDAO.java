@@ -79,6 +79,31 @@ public class eventDAO {
         }
     }
 
+    public Event findEvent(String personID, String eventType) throws DataAccessException {
+        Event event = null;
+        ResultSet rs;
+        String sql = "SELECT * FROM event WHERE personID = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, personID);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("eventType").equalsIgnoreCase(eventType)) {
+                    event = new Event(rs.getString("eventID"), rs.getString("associatedUsername"),
+                            rs.getString("personID"), rs.getFloat("latitude"), rs.getFloat("longitude"),
+                            rs.getString("country"), rs.getString("city"), rs.getString("eventType"),
+                            rs.getInt("year"));
+                    break;
+                }
+            }
+            return event;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding an event in the database");
+        }
+    }
+
     /**
      * Clears the event table in the database
      */
@@ -86,6 +111,18 @@ public class eventDAO {
     public void clearEvent() throws DataAccessException{
         String sql = "DELETE FROM event";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while clearing the event table");
+        }
+    }
+
+    public void deleteEvent(String eventID) throws DataAccessException {
+        String sql = "DELETE FROM event WHERE eventID = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, eventID);
             stmt.executeUpdate();
         }
         catch (SQLException e) {
