@@ -13,7 +13,7 @@ public class RegisterHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         System.out.println("RegisterHandler");
-
+        //FIXME: use hasALLValues to check if it has all the values
         try {
             if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
                 Gson gson = new Gson();
@@ -53,5 +53,33 @@ public class RegisterHandler implements HttpHandler {
         BufferedWriter bw = new BufferedWriter(sw);
         bw.write(str);
         bw.flush();
+    }
+
+    private boolean hasAllValues(RegisterRequest registerRequest) {
+        if (registerRequest.getUsername().equals("") || registerRequest.getUsername() == null) {
+            return false;
+        }
+
+        if (registerRequest.getPassword().equals("") || registerRequest.getPassword() == null) {
+            return false;
+        }
+
+        if (registerRequest.getEmail().equals("") || registerRequest.getEmail() == null) {
+            return false;
+        }
+
+        if (registerRequest.getFirstName().equals("") || registerRequest.getFirstName() == null) {
+            return false;
+        }
+
+        if (registerRequest.getLastName().equals("") || registerRequest.getLastName() == null) {
+            return false;
+        }
+
+        if (registerRequest.getGender().equals("") || registerRequest.getGender() == null) {
+            return false;
+        }
+
+        return true;
     }
 }

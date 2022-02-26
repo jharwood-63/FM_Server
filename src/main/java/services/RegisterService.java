@@ -44,30 +44,35 @@ public class RegisterService {
             Random rand = new Random();
 
             //Create user
-            User user = createUser(registerRequest);
+            if (userDAO.find(registerRequest.getUsername()) != null) {
+                User user = createUser(registerRequest);
 
-            //Create person
-            int birthYear = rand.nextInt(HIGH_BIRTH_YEAR - LOW_BIRTH_YEAR) + LOW_BIRTH_YEAR;
-            Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4, birthYear, personDAO, eventDAO);
-            //FIXME: delete the death event for this user
-            Event deathEvent = eventDAO.findEvent(person.getPersonID(), "death");
-            eventDAO.deleteEvent(deathEvent.getEventID());
-            resetPerson(person, user);
-            personDAO.insertPerson(person);
+                //Create person
+                int birthYear = rand.nextInt(HIGH_BIRTH_YEAR - LOW_BIRTH_YEAR) + LOW_BIRTH_YEAR;
+                Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4, birthYear, personDAO, eventDAO);
+                Event deathEvent = eventDAO.findEvent(person.getPersonID(), "death");
+                eventDAO.deleteEvent(deathEvent.getEventID());
+                resetPerson(person, user);
+                personDAO.insertPerson(person);
 
-            //sync user with person and insert person
-            user.setPersonID(person.getPersonID());
-            userDAO.insertUser(user);
+                //sync user with person and insert person
+                user.setPersonID(person.getPersonID());
+                userDAO.insertUser(user);
 
-            // Login user
-            String authTokenString = UUID.randomUUID().toString();
-            AuthToken authToken = new AuthToken(authTokenString, user.getUsername());
-            authTokenDAO.insertAuthToken(authToken);
+                // Login user
+                String authTokenString = UUID.randomUUID().toString();
+                AuthToken authToken = new AuthToken(authTokenString, user.getUsername());
+                authTokenDAO.insertAuthToken(authToken);
 
-            //close the connection after dao operations are done
-            manager.closeConnection(true);
+                //close the connection after dao operations are done
+                manager.closeConnection(true);
 
-            return new RegisterResponse(authTokenString, user.getUsername(), user.getPersonID(), true);
+                return new RegisterResponse(authTokenString, user.getUsername(), user.getPersonID(), true);
+            }
+            else {
+                manager.closeConnection(false);
+                return new Response("Error: username already in use", false);
+            }
         }
         catch (DataAccessException e) {
             e.printStackTrace();
