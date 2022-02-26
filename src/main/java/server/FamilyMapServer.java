@@ -3,7 +3,9 @@ package server;
 import java.io.*;
 import java.net.*;
 import com.sun.net.httpserver.*;
+import handlers.ClearHandler;
 import handlers.FileRequestHandler;
+import handlers.LoginHandler;
 import handlers.RegisterHandler;
 
 public class FamilyMapServer {
@@ -38,5 +40,7 @@ public class FamilyMapServer {
 
         server.createContext("/", new FileRequestHandler());
         server.createContext("/user/register", new RegisterHandler());
+        server.createContext("/user/login", new LoginHandler());
+        server.createContext("/clear", new ClearHandler());
     }
 }

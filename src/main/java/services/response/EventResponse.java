@@ -6,7 +6,7 @@ import model.Event;
  * EventResponse holds the message and success status
  */
 
-public class EventResponse {
+public class EventResponse extends Response {
     private String associatedUsername;
     private String eventID;
     private String personID;
@@ -19,15 +19,13 @@ public class EventResponse {
 
     private Event [] data;
 
-    boolean success;
-    String message;
-
     /**
      * EventResponse constructor for a single event. If responseEvent is null, creates a message
      * @param responseEvent The event that was found in the operation
      */
 
-    public EventResponse(Event responseEvent) {
+    public EventResponse(Event responseEvent, boolean success) {
+        super(success);
         this.associatedUsername = responseEvent.getAssociatedUsername();
         this.eventID = responseEvent.getEventID();
         this.personID = responseEvent.getPersonID();
@@ -44,7 +42,8 @@ public class EventResponse {
      * @param responseEvents Array of events that were found in the database
      */
 
-    public EventResponse(Event [] responseEvents) {
+    public EventResponse(Event [] responseEvents, boolean success) {
+        super(success);
         this.data = responseEvents;
     }
 }

@@ -33,22 +33,25 @@ public class LoginService {
             userDAO userDAO = new userDAO(conn);
             authTokenDAO authTokenDAO = new authTokenDAO(conn);
 
-            //find the username in the table
             User user = userDAO.find(loginRequest.getUsername());
             if (user != null) {
                 if (loginRequest.getPassword().equals(user.getPassword())) {
-                    //create a new string authtoken
-                    //add the authtoken object to the database
                     String authtoken = UUID.randomUUID().toString();
                     AuthToken authToken = new AuthToken(authtoken, user.getUsername());
-
                     authTokenDAO.insertAuthToken(authToken);
 
-                    //create and return the response object
+                    manager.closeConnection(true);
+                    return new LoginResponse(authtoken, authToken.getUsername(), user.getPersonID(), true);
+                }
+                else {
+                    manager.closeConnection(false);
+                    return new Response("Error: username or password is incorrect", false);
                 }
             }
-
-            //return the response object
+            else {
+                manager.closeConnection(false);
+                return new Response("Error: username or password is incorrect", false);
+            }
         }
         catch (DataAccessException e) {
             e.printStackTrace();

@@ -33,6 +33,11 @@ public class FileRequestHandler implements HttpHandler {
                 Files.copy(file.toPath(), respBody);
                 respBody.close();
             }
+            else {
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                OutputStream respBody = exchange.getResponseBody();
+                respBody.close();
+            }
         }
         catch (IOException e) {
             e.printStackTrace();

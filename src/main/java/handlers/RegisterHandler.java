@@ -35,6 +35,11 @@ public class RegisterHandler implements HttpHandler {
                 writeString(jsonResult, respBody);
                 respBody.close();
             }
+            else {
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                OutputStream respBody = exchange.getResponseBody();
+                respBody.close();
+            }
         }
         catch (IOException e) {
             e.printStackTrace();

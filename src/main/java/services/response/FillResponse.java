@@ -4,9 +4,7 @@ package services.response;
  * FillResponse object holds data for a response to a fill operation
  */
 
-public class FillResponse {
-    private String message;
-    private boolean success;
+public class FillResponse extends Response {
 
     /**
      * FillResponse constructor for creating a response to a fill operation. The message is different based on the success status.
@@ -16,6 +14,6 @@ public class FillResponse {
      */
 
     public FillResponse(boolean success, int numPersons, int numEvents) {
-        this.success = success;
+        super("PLACEHOLDER", success);
     }
 }

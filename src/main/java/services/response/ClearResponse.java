@@ -4,10 +4,7 @@ package services.response;
  * ClearResponse object holds the data for the response to a ClearRequest
  */
 
-public class ClearResponse {
-    private String message;
-    private boolean success;
-
+public class ClearResponse extends Response {
     /**
      * ClearResponse constructor creates a ClearResponse object that holds a message and a success status
      * @param message Description of the outcome of the clear
@@ -15,7 +12,6 @@ public class ClearResponse {
      */
 
     public ClearResponse(String message, boolean success) {
-        this.message = message;
-        this.success = success;
+        super(message, success);
     }
 }

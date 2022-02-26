@@ -7,7 +7,7 @@ import model.Person;
  * This is a response for both a single person request and an all persons request
  */
 
-public class PersonResponse {
+public class PersonResponse extends Response {
     private Person [] data;
 
     private String associatedUsername;
@@ -18,9 +18,6 @@ public class PersonResponse {
     private String fatherID;
     private String motherID;
     private String spouseID;
-
-    private boolean success;
-    private String message;
 
     /**
      * Response constructor for a specific person request
@@ -36,6 +33,7 @@ public class PersonResponse {
      */
 
     public PersonResponse(String associatedUsername, String personID, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID, boolean success) {
+        super(success);
         this.associatedUsername = associatedUsername;
         this.personID = personID;
         this.firstName = firstName;
@@ -44,7 +42,6 @@ public class PersonResponse {
         this.fatherID = fatherID;
         this.motherID = motherID;
         this.spouseID = spouseID;
-        this.success = success;
     }
 
     /**
@@ -54,7 +51,7 @@ public class PersonResponse {
      */
 
     public PersonResponse(Person [] data, boolean success) {
+        super(success);
         this.data = data;
-        this.success = success;
     }
 }

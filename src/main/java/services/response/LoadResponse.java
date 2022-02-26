@@ -4,9 +4,7 @@ package services.response;
  * Holds the response data that will be returned with the result of the operation
  */
 
-public class LoadResponse {
-    private String message;
-    private boolean success;
+public class LoadResponse extends Response {
 
     /**
      * LoadResponse constructor creates a message and initializes the success status
@@ -17,6 +15,6 @@ public class LoadResponse {
      */
 
     public LoadResponse(boolean success, int numUsers, int numPersons, int numEvents) {
-        this.success = success;
+        super("PLACEHOLDER", success);
     }
 }

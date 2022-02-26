@@ -3,26 +3,24 @@ package handlers;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import services.LoginService;
-import services.requests.LoginRequest;
+import services.ClearService;
 import services.response.Response;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 
-public class LoginHandler implements HttpHandler {
+public class ClearHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        System.out.println("LoginHandler");
+        System.out.println("ClearHandler");
 
         try {
             if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
-                Gson gson = new Gson();
-                Reader reqBody = new InputStreamReader(exchange.getRequestBody());
-                LoginRequest loginRequest = (LoginRequest) gson.fromJson(reqBody, LoginRequest.class);
-
-                LoginService loginService = new LoginService();
-                Response response = loginService.login(loginRequest);
+                ClearService clearService = new ClearService();
+                Response response = clearService.clear();
 
                 if (response.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -31,6 +29,7 @@ public class LoginHandler implements HttpHandler {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
                 }
 
+                Gson gson = new Gson();
                 OutputStream respBody = exchange.getResponseBody();
                 String jsonResult = gson.toJson(response);
                 writeString(jsonResult, respBody);
@@ -44,11 +43,10 @@ public class LoginHandler implements HttpHandler {
         }
         catch (IOException e) {
             e.printStackTrace();
-            throw new IOException("Error encountered trying to login a user");
+            throw new IOException("Error encountered trying to clear the database");
         }
     }
 
-    //FIXME: find a way to not have to duplicate this
     private void writeString(String str, OutputStream os) throws IOException {
         OutputStreamWriter sw = new OutputStreamWriter(os);
         BufferedWriter bw = new BufferedWriter(sw);
