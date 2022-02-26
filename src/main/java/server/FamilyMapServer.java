@@ -8,6 +8,8 @@ import handlers.FileRequestHandler;
 import handlers.LoginHandler;
 import handlers.RegisterHandler;
 
+//FIXME: Look back over the lab specs for possible errors!!!!!!!
+
 public class FamilyMapServer {
     private static final int MAX_WAITING_CONNECTIONS = 12;
     private HttpServer server;

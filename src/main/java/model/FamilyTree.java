@@ -14,7 +14,7 @@ public class FamilyTree {
     private final static String BIRTH_EVENT = "birth";
     private final static String MARRIAGE_EVENT = "marriage";
     private final static String DEATH_EVENT = "death";
-    private final static String[] OTHER_EVENTS = new String[]{"baptism", "graduation", "retirement", "kiss"};
+    private final static String[] OTHER_EVENTS = new String[]{"baptism", "graduation", "retirement", "first_kiss"};
 
     private static Data data = new Data();
 
@@ -24,7 +24,7 @@ public class FamilyTree {
         Person father = null;
         Person person;
 
-        if (generations > 1) {
+        if (generations > 0) {
             int motherBirthYear = rand.nextInt((birthYear - 20) - (birthYear - 40)) + (birthYear - 40);
             int fatherBirthYear = rand.nextInt((birthYear - 20) - (birthYear - 40)) + (birthYear - 40);
 
