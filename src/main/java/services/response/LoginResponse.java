@@ -4,13 +4,10 @@ package services.response;
  * LoginResponse holds the data and success status returned after a login is performed
  */
 
-public class LoginResponse {
+public class LoginResponse extends Response {
     private String authtoken;
     private String username;
     private String personID;
-
-    private boolean success;
-    private String message;
 
     /**
      * LoginResponse constructor for creating a response to a login operation. If success is false, a message is created.
@@ -21,9 +18,9 @@ public class LoginResponse {
      */
 
     public LoginResponse(String authtoken, String username, String personID, boolean success) {
+        super(success);
         this.authtoken = authtoken;
         this.username = username;
         this.personID = personID;
-        this.success = success;
     }
 }
