@@ -1,8 +1,11 @@
 package dao;
 
 import model.Person;
+import model.User;
 
 import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * personDAO accesses data in the database
@@ -104,6 +107,54 @@ public class personDAO {
         catch (SQLException e) {
             e.printStackTrace();
             throw new DataAccessException("Error encountered while deleting a person");
+        }
+    }
+
+    public void clearPerson(String username) throws DataAccessException {
+        String sql = "DELETE FROM person WHERE associatedUsername = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while deleting a person");
+        }
+    }
+
+    //FIXME: NOT SURE IF IM GONNA NEED THIS BUT ILL KEEP IT FOR NOW
+    private Set<Person> findSet(String username) throws DataAccessException {
+        Set<Person> persons = new HashSet<>();
+        ResultSet rs;
+        String sql = "SELECT * FROM person WHERE associatedUsername = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                persons.add(createPerson(rs));
+            }
+            return persons;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error trying to find persons associated with the username");
+        }
+    }
+
+    private Person createPerson(ResultSet rs) throws SQLException {
+        try {
+            Person person = new Person(rs.getString("personID"), rs.getString("AssociatedUsername"),
+                    rs.getString("firstName"), rs.getString("lastName"), rs.getString("gender"),
+                    rs.getString("fatherID"), rs.getString("motherID"), rs.getString("spouseID"));
+
+            return person;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error creating person");
         }
     }
 }

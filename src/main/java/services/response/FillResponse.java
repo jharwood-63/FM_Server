@@ -13,7 +13,7 @@ public class FillResponse extends Response {
      * @param numPersons Number of persons added to the database
      */
 
-    public FillResponse(boolean success, int numPersons, int numEvents) {
-        super("PLACEHOLDER", success);
+    public FillResponse(int numPersons, int numEvents, boolean success) {
+        super("Successfully added " + numPersons + " persons and " + numEvents + " events to the database", success);
     }
 }

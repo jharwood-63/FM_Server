@@ -119,6 +119,19 @@ public class eventDAO {
         }
     }
 
+    public void clearEvent(String username) throws DataAccessException {
+        String sql = "DELETE FROM event WHERE associatedUsername = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while deleting an event");
+        }
+    }
+
     public void deleteEvent(String eventID) throws DataAccessException {
         String sql = "DELETE FROM event WHERE eventID = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

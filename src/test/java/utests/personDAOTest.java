@@ -5,6 +5,7 @@ import model.Person;
 
 import org.junit.jupiter.api.*;
 import java.sql.Connection;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,10 +38,10 @@ public class personDAOTest {
         String motherID = UUID.randomUUID().toString();
         String spouseID = UUID.randomUUID().toString();
 
-        this.personNormal = new Person(personID1,"jharwood",
+        this.personNormal = new Person(personID1,"jlharwood",
                 "Jackson", "Harwood", "m", fatherID,
                 motherID, spouseID);
-        this.personNullIDs = new Person(personID2,"jharwood",
+        this.personNullIDs = new Person(personID2,"jlharwood",
                 "Jackson", "Harwood", "m", null,
                 null, null);
         this.personNullUsername = new Person(personID3,null,
@@ -50,7 +51,7 @@ public class personDAOTest {
 
     @AfterEach
     public void cleanUp() {
-        manager.closeConnection(true);
+        manager.closeConnection(false);
     }
 
     @Test
@@ -130,16 +131,19 @@ public class personDAOTest {
     }
 
     @Test
-    public void clear() throws DataAccessException {
+    public void clearUsernameTest() throws DataAccessException {
         try {
-            pDAO.clearPerson();
-            uDAO.clearUser();
-            atDAO.clearAuthToken();
-            eDAO.clearEvent();
+            pDAO.insertPerson(personNormal);
+            pDAO.insertPerson(personNullIDs);
+
+            pDAO.clearPerson(personNormal.getAssociatedUsername());
+
+            assertEquals(null, pDAO.find(personNormal.getPersonID()));
+            assertEquals(null, pDAO.find(personNullIDs.getPersonID()));
         }
         catch (DataAccessException e) {
             e.printStackTrace();
-            throw new DataAccessException("Error encountered while testing person clear");
+            throw new DataAccessException("Error");
         }
     }
 }

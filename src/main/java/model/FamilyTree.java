@@ -4,6 +4,7 @@ import dao.DataAccessException;
 import dao.eventDAO;
 import dao.personDAO;
 
+import java.sql.Connection;
 import java.util.Random;
 import java.util.UUID;
 
@@ -18,8 +19,10 @@ public class FamilyTree {
 
     private static Data data = new Data();
 
-    public Person generatePerson(String gender, String associateUsername, int generations, int birthYear, personDAO personDAO, eventDAO eventDAO) throws DataAccessException {
+    public Person generatePerson(String gender, String associateUsername, int generations, int birthYear, Connection conn) throws DataAccessException {
         Random rand = new Random();
+        eventDAO eventDAO = new eventDAO(conn);
+        personDAO personDAO = new personDAO(conn);
         Person mother = null;
         Person father = null;
         Person person;
@@ -28,8 +31,8 @@ public class FamilyTree {
             int motherBirthYear = rand.nextInt((birthYear - 20) - (birthYear - 40)) + (birthYear - 40);
             int fatherBirthYear = rand.nextInt((birthYear - 20) - (birthYear - 40)) + (birthYear - 40);
 
-            mother = generatePerson(FEMALE, associateUsername, generations - 1, motherBirthYear, personDAO, eventDAO);
-            father = generatePerson(MALE, associateUsername, generations - 1, fatherBirthYear, personDAO, eventDAO);
+            mother = generatePerson(FEMALE, associateUsername, generations - 1, motherBirthYear, conn);
+            father = generatePerson(MALE, associateUsername, generations - 1, fatherBirthYear, conn);
 
             mother.setSpouseID(father.getPersonID());
             father.setSpouseID(mother.getPersonID());

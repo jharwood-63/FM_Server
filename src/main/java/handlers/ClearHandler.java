@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import services.ClearService;
+import services.Utility;
 import services.response.Response;
 
 import java.io.BufferedWriter;
@@ -19,6 +20,7 @@ public class ClearHandler implements HttpHandler {
 
         try {
             if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
+                Utility utility = new Utility();
                 ClearService clearService = new ClearService();
                 Response response = clearService.clear();
 
@@ -32,7 +34,7 @@ public class ClearHandler implements HttpHandler {
                 Gson gson = new Gson();
                 OutputStream respBody = exchange.getResponseBody();
                 String jsonResult = gson.toJson(response);
-                writeString(jsonResult, respBody);
+                utility.writeString(jsonResult, respBody);
                 respBody.close();
             }
             else {
@@ -45,12 +47,5 @@ public class ClearHandler implements HttpHandler {
             e.printStackTrace();
             throw new IOException("Error encountered trying to clear the database");
         }
-    }
-
-    private void writeString(String str, OutputStream os) throws IOException {
-        OutputStreamWriter sw = new OutputStreamWriter(os);
-        BufferedWriter bw = new BufferedWriter(sw);
-        bw.write(str);
-        bw.flush();
     }
 }

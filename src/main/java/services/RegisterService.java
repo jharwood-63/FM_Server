@@ -43,35 +43,38 @@ public class RegisterService {
             FamilyTree familyTree = new FamilyTree();
             Random rand = new Random();
 
-            //Create user
-            if (userDAO.find(registerRequest.getUsername()) != null) {
-                User user = createUser(registerRequest);
+            if (hasAllValues(registerRequest)) {
+                if (userDAO.find(registerRequest.getUsername()) == null) {
+                    User user = createUser(registerRequest);
 
-                //Create person
-                int birthYear = rand.nextInt(HIGH_BIRTH_YEAR - LOW_BIRTH_YEAR) + LOW_BIRTH_YEAR;
-                Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4, birthYear, personDAO, eventDAO);
-                Event deathEvent = eventDAO.findEvent(person.getPersonID(), "death");
-                eventDAO.deleteEvent(deathEvent.getEventID());
-                resetPerson(person, user);
-                personDAO.insertPerson(person);
+                    //Create person
+                    int birthYear = rand.nextInt(HIGH_BIRTH_YEAR - LOW_BIRTH_YEAR) + LOW_BIRTH_YEAR;
+                    Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4, birthYear, conn);
+                    Event deathEvent = eventDAO.findEvent(person.getPersonID(), "death");
+                    eventDAO.deleteEvent(deathEvent.getEventID());
+                    resetPerson(person, user);
+                    personDAO.insertPerson(person);
 
-                //sync user with person and insert person
-                user.setPersonID(person.getPersonID());
-                userDAO.insertUser(user);
+                    //sync user with person and insert person
+                    user.setPersonID(person.getPersonID());
+                    userDAO.insertUser(user);
 
-                // Login user
-                String authTokenString = UUID.randomUUID().toString();
-                AuthToken authToken = new AuthToken(authTokenString, user.getUsername());
-                authTokenDAO.insertAuthToken(authToken);
+                    // Login user
+                    String authTokenString = UUID.randomUUID().toString();
+                    AuthToken authToken = new AuthToken(authTokenString, user.getUsername());
+                    authTokenDAO.insertAuthToken(authToken);
 
-                //close the connection after dao operations are done
-                manager.closeConnection(true);
-
-                return new RegisterResponse(authTokenString, user.getUsername(), user.getPersonID(), true);
+                    //close the connection after dao operations are done
+                    manager.closeConnection(true);
+                    return new RegisterResponse(authTokenString, user.getUsername(), user.getPersonID(), true);
+                } else {
+                    manager.closeConnection(false);
+                    return new Response("Error: username already in use", false);
+                }
             }
             else {
                 manager.closeConnection(false);
-                return new Response("Error: username already in use", false);
+                return new Response("Error: incorrect or incomplete request", false);
             }
         }
         catch (DataAccessException e) {
@@ -91,5 +94,33 @@ public class RegisterService {
     private void resetPerson(Person person, User user) {
         person.setFirstName(user.getFirstName());
         person.setLastName(user.getLastName());
+    }
+
+    private boolean hasAllValues(RegisterRequest registerRequest) {
+        if (registerRequest.getUsername().equals("") || registerRequest.getUsername() == null) {
+            return false;
+        }
+
+        if (registerRequest.getPassword().equals("") || registerRequest.getPassword() == null) {
+            return false;
+        }
+
+        if (registerRequest.getEmail().equals("") || registerRequest.getEmail() == null) {
+            return false;
+        }
+
+        if (registerRequest.getFirstName().equals("") || registerRequest.getFirstName() == null) {
+            return false;
+        }
+
+        if (registerRequest.getLastName().equals("") || registerRequest.getLastName() == null) {
+            return false;
+        }
+
+        if (registerRequest.getGender().equals("") || registerRequest.getGender() == null) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -7,6 +7,7 @@ import dao.userDAO;
 import model.AuthToken;
 import model.User;
 import services.requests.LoginRequest;
+import services.requests.RegisterRequest;
 import services.response.LoginResponse;
 import services.response.Response;
 
@@ -32,25 +33,28 @@ public class LoginService {
             Connection conn = manager.getConnection();
             userDAO userDAO = new userDAO(conn);
             authTokenDAO authTokenDAO = new authTokenDAO(conn);
+            if (hasAllValues(loginRequest)) {
+                User user = userDAO.find(loginRequest.getUsername());
+                if (user != null) {
+                    if (loginRequest.getPassword().equals(user.getPassword())) {
+                        String authtoken = UUID.randomUUID().toString();
+                        AuthToken authToken = new AuthToken(authtoken, user.getUsername());
+                        authTokenDAO.insertAuthToken(authToken);
 
-            User user = userDAO.find(loginRequest.getUsername());
-            if (user != null) {
-                if (loginRequest.getPassword().equals(user.getPassword())) {
-                    String authtoken = UUID.randomUUID().toString();
-                    AuthToken authToken = new AuthToken(authtoken, user.getUsername());
-                    authTokenDAO.insertAuthToken(authToken);
-
-                    manager.closeConnection(true);
-                    return new LoginResponse(authtoken, authToken.getUsername(), user.getPersonID(), true);
-                }
-                else {
+                        manager.closeConnection(true);
+                        return new LoginResponse(authtoken, authToken.getUsername(), user.getPersonID(), true);
+                    } else {
+                        manager.closeConnection(false);
+                        return new Response("Error: username or password is incorrect", false);
+                    }
+                } else {
                     manager.closeConnection(false);
                     return new Response("Error: username or password is incorrect", false);
                 }
             }
             else {
                 manager.closeConnection(false);
-                return new Response("Error: username or password is incorrect", false);
+                return new Response("Error: incorrect or incomplete request", false);
             }
         }
         catch (DataAccessException e) {
@@ -58,5 +62,17 @@ public class LoginService {
             manager.closeConnection(false);
             return new Response("Error: Unable to login user", false);
         }
+    }
+
+    private boolean hasAllValues(LoginRequest loginRequest) {
+        if (loginRequest.getUsername().equals("") || loginRequest.getUsername() == null) {
+            return false;
+        }
+
+        if (loginRequest.getPassword().equals("") || loginRequest.getPassword() == null) {
+            return false;
+        }
+
+        return true;
     }
 }
