@@ -25,8 +25,13 @@ public class FillHandler implements HttpHandler {
                 String[] info = urlInfo.split("/", 4);
                 String username = info[2];
                 int generations;
-                if (!info[3].equals("")) {
-                    generations = Integer.parseInt(info[3]);
+                if (info.length == 4) {
+                    if (!info[3].equals("")) {
+                        generations = Integer.parseInt(info[3]);
+                    }
+                    else {
+                        generations = 4;
+                    }
                 }
                 else {
                     generations = 4;
