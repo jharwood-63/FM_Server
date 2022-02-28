@@ -37,23 +37,14 @@ public class RegisterService {
         try {
             Connection conn = manager.getConnection();
             userDAO userDAO = new userDAO(conn);
-            personDAO personDAO = new personDAO(conn);
             authTokenDAO authTokenDAO = new authTokenDAO(conn);
-            eventDAO eventDAO = new eventDAO(conn);
-            FamilyTree familyTree = new FamilyTree();
-            Random rand = new Random();
 
             if (hasAllValues(registerRequest)) {
                 if (userDAO.find(registerRequest.getUsername()) == null) {
                     User user = createUser(registerRequest);
 
                     //Create person
-                    int birthYear = rand.nextInt(HIGH_BIRTH_YEAR - LOW_BIRTH_YEAR) + LOW_BIRTH_YEAR;
-                    Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4, birthYear, conn);
-                    Event deathEvent = eventDAO.findEvent(person.getPersonID(), "death");
-                    eventDAO.deleteEvent(deathEvent.getEventID());
-                    resetPerson(person, user);
-                    personDAO.insertPerson(person);
+                    Person person = createPerson(conn, user);
 
                     //sync user with person and insert person
                     user.setPersonID(person.getPersonID());
@@ -89,6 +80,28 @@ public class RegisterService {
                 registerRequest.getFirstName(), registerRequest.getLastName(), registerRequest.getGender(), "");
 
         return  regUser;
+    }
+
+    private Person createPerson(Connection conn, User user) throws DataAccessException {
+        Random rand = new Random();
+        FamilyTree familyTree = new FamilyTree();
+
+        int birthYear = rand.nextInt(HIGH_BIRTH_YEAR - LOW_BIRTH_YEAR) + LOW_BIRTH_YEAR;
+        Person person = familyTree.generatePerson(user.getGender(), user.getUsername(), 4, birthYear, conn);
+
+        syncEvents(conn, person, user);
+
+        return person;
+    }
+
+    private void syncEvents(Connection conn, Person person, User user) throws DataAccessException {
+        eventDAO eventDAO = new eventDAO(conn);
+        personDAO personDAO = new personDAO(conn);
+
+        Event deathEvent = eventDAO.findEvent(person.getPersonID(), "death");
+        eventDAO.deleteEvent(deathEvent.getEventID());
+        resetPerson(person, user);
+        personDAO.insertPerson(person);
     }
 
     private void resetPerson(Person person, User user) {
