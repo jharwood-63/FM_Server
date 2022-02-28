@@ -21,15 +21,9 @@ public class ClearService {
 
         try {
             Connection conn = manager.getConnection();
-            userDAO userDAO = new userDAO(conn);
-            personDAO personDAO = new personDAO(conn);
-            eventDAO eventDAO = new eventDAO(conn);
-            authTokenDAO authTokenDAO = new authTokenDAO(conn);
+            Utility utility = new Utility();
 
-            userDAO.clearUser();
-            personDAO.clearPerson();
-            eventDAO.clearEvent();
-            authTokenDAO.clearAuthToken();
+            utility.clear(conn);
 
             manager.closeConnection(true);
             return new ClearResponse("Clear succeeded.", true);
