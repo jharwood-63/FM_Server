@@ -50,6 +50,15 @@ public class PersonHandler implements HttpHandler {
                     utility.writeString(jsonResult, respBody);
                     respBody.close();
                 }
+                else {
+                    Response response = new Response("Authorization key missing", false);
+
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream respBody = exchange.getResponseBody();
+                    String jsonResult = gson.toJson(response);
+                    utility.writeString(jsonResult, respBody);
+                    respBody.close();
+                }
             }
             else {
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
