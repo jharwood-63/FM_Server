@@ -1,6 +1,7 @@
 package services.response;
 
 import model.Event;
+import model.FamilyTree;
 
 /**
  * EventResponse holds the message and success status
@@ -10,12 +11,12 @@ public class EventResponse extends Response {
     private String associatedUsername;
     private String eventID;
     private String personID;
-    private double latitude;
-    private double longitude;
+    private Float latitude;
+    private Float longitude;
     private String country;
     private String city;
     private String eventType;
-    private int year;
+    private Integer year;
 
     private Event [] data;
 
