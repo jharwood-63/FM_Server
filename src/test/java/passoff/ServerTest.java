@@ -61,7 +61,7 @@ public class ServerTest {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private static String host = "localhost";
-    private static String port = "8080";
+    private static String port = "7979";
     private static boolean displayCurrentTest = true;
     private Proxy proxy;
 

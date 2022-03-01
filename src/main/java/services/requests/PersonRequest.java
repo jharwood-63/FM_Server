@@ -6,22 +6,19 @@ package services.requests;
 
 public class PersonRequest {
     private String personID;
+    private String authtoken;
 
-    /**
-     * PersonRequest constructor for requesting a specific person
-     * @param personID Unique person ID for the requested person
-     */
-
-    public PersonRequest(String personID) {
+    public PersonRequest(String personID, String authtoken) {
         this.personID = personID;
+        this.authtoken = authtoken;
     }
 
     /**
      * Default constructor for requesting all persons connected to the current user
      */
 
-    public PersonRequest() {
-
+    public PersonRequest(String authtoken) {
+        this.authtoken = authtoken;
     }
 
     public String getPersonID() {
