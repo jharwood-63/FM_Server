@@ -52,12 +52,12 @@ public class EventService {
                         }
                         else {
                             manager.closeConnection(false);
-                            return new Result("Event requested is not associated with the requesting user", false);
+                            return new Result("Error: Event requested is not associated with the requesting user", false);
                         }
                     }
                     else {
                         manager.closeConnection(false);
-                        return new Result("Unable to find specified event in database", false);
+                        return new Result("Error: Unable to find specified event in database", false);
                     }
                 }
                 else {
@@ -71,7 +71,7 @@ public class EventService {
             }
             else {
                 manager.closeConnection(false);
-                return new Result("Invalid authtoken provided", false);
+                return new Result("Error: Invalid authtoken provided", false);
             }
         }
         catch (DataAccessException e) {

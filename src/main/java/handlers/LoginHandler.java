@@ -30,7 +30,7 @@ public class LoginHandler implements HttpHandler {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 }
                 else {
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 }
 
                 OutputStream respBody = exchange.getResponseBody();
@@ -46,7 +46,9 @@ public class LoginHandler implements HttpHandler {
         }
         catch (IOException e) {
             e.printStackTrace();
-            throw new IOException("Error encountered trying to login a user");
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
+            OutputStream respBody = exchange.getResponseBody();
+            respBody.close();
         }
     }
 }

@@ -37,7 +37,10 @@ public class FamilyTree {
             mother.setSpouseID(father.getPersonID());
             father.setSpouseID(mother.getPersonID());
 
-            Event motherMarriage = createEvent(MARRIAGE_EVENT, motherBirthYear, null, 0);
+            int youngest = findYoungest(motherBirthYear, fatherBirthYear);
+            int marriageYear = rand.nextInt((youngest + 50) - (youngest + 13)) + (youngest + 13);
+
+            Event motherMarriage = createEvent(MARRIAGE_EVENT, motherBirthYear, null, marriageYear);
             Location marriageLocation = new Location (motherMarriage.getCountry(), motherMarriage.getCity(), String.valueOf(motherMarriage.getLatitude()),
                     String.valueOf(motherMarriage.getLongitude()));
 
@@ -124,7 +127,7 @@ public class FamilyTree {
         else if (eventType.equalsIgnoreCase(MARRIAGE_EVENT)) {
             if (marriageLocation == null) {
                 event = new Event(eventID, "", "", latitude, longitude, location.getCountry(), location.getCity(),
-                        eventType, birthYear + 20);
+                        eventType, marriageYear);
             }
             else {
                 latitude = Float.parseFloat(marriageLocation.getLatitude());
@@ -176,5 +179,14 @@ public class FamilyTree {
         String lastName = data.getsNames().getData()[rand.nextInt(data.getSNameLength())];
 
         return lastName;
+    }
+
+    private int findYoungest(int motherBirthYear, int fatherBirthYear) {
+        if (motherBirthYear >= fatherBirthYear) {
+            return motherBirthYear;
+        }
+        else {
+            return fatherBirthYear;
+        }
     }
 }

@@ -46,7 +46,7 @@ public class FillHandler implements HttpHandler {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 }
                 else {
-                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 }
 
                 OutputStream respBody = exchange.getResponseBody();
@@ -57,7 +57,9 @@ public class FillHandler implements HttpHandler {
         }
         catch (IOException e) {
             e.printStackTrace();
-            throw new IOException("Error encountered trying to fill the database");
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
+            OutputStream respBody = exchange.getResponseBody();
+            respBody.close();
         }
     }
 }

@@ -50,18 +50,17 @@ public class PersonService {
                         }
                         else {
                             manager.closeConnection(false);
-                            return new Result("Person requested is not associated with the requesting user", false);
+                            return new Result("Error: Person requested is not associated with the requesting user", false);
                         }
                     }
                     else {
                         manager.closeConnection(false);
-                        return new Result("Unable to find specified person in database", false);
+                        return new Result("Error: Unable to find specified person in database", false);
                     }
                 }
                 else {
                     Set<Person> persons = personDAO.findAll(authTokenUsername);
-                    Person[] personArray = new Person[persons.size()];
-                    persons.toArray(personArray);
+                    Person[] personArray = loadArray(persons);
 
                     manager.closeConnection(true);
                     return new PersonResult(personArray, true);
@@ -69,7 +68,7 @@ public class PersonService {
             }
             else {
                 manager.closeConnection(false);
-                return new Result("Invalid authtoken provided", false);
+                return new Result("Error: Invalid authtoken provided", false);
             }
         }
         catch (DataAccessException e) {
@@ -77,5 +76,17 @@ public class PersonService {
             manager.closeConnection(false);
             return new Result("Error: unable to complete request", false);
         }
+    }
+
+    private Person[] loadArray(Set<Person> persons) {
+        Person[] personArray = new Person[persons.size()];
+
+        int i = 0;
+        for (Person person : persons) {
+            personArray[i] = person;
+            i++;
+        }
+
+        return personArray;
     }
 }
