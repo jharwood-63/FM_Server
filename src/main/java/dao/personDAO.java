@@ -1,7 +1,6 @@
 package dao;
 
 import model.Person;
-import model.User;
 
 import java.sql.*;
 import java.util.HashSet;

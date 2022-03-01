@@ -1,4 +1,4 @@
-package utests;
+package unittests;
 
 import dao.DataAccessException;
 import dao.DatabaseManager;

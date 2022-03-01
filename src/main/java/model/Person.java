@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Set;
+
 /**
  * The Person class represents the data that is stored in the person table
  * It contains a personID, associatedUsername, firstName, lastName, gender, fatherID, motherID, spouseID
@@ -221,5 +223,15 @@ public class Person {
 
     public void setSpouseID(String spouseID) {
         this.spouseID = spouseID;
+    }
+
+    public boolean isInSet(Set<Person> persons) {
+        for (Person testPerson : persons) {
+            if (this.equals(testPerson)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

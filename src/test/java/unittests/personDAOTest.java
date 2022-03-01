@@ -1,4 +1,4 @@
-package utests;
+package unittests;
 
 import dao.*;
 import model.Person;
@@ -144,6 +144,25 @@ public class personDAOTest {
         catch (DataAccessException e) {
             e.printStackTrace();
             throw new DataAccessException("Error");
+        }
+    }
+
+    @Test
+    @DisplayName("Positive find all test")
+    public void findAllTest() throws DataAccessException {
+        try {
+            pDAO.insertPerson(personNormal);
+            pDAO.insertPerson(personNullIDs);
+
+            Set<Person> persons = pDAO.findAll(personNormal.getAssociatedUsername());
+
+            for (Person person : persons) {
+                assertTrue(person.isInSet(persons));
+            }
+        }
+        catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error accessing data in the database");
         }
     }
 }
