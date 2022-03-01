@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * EventDAO accesses data in the database
@@ -141,6 +143,42 @@ public class eventDAO {
         catch (SQLException e) {
             e.printStackTrace();
             throw new DataAccessException("Error encountered while clearing the event table");
+        }
+    }
+
+    public Set<Event> findAll(String username) throws DataAccessException {
+        Set<Event> events = new HashSet<>();
+        ResultSet rs;
+        String sql = "SELECT * FROM event WHERE associatedUsername = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                events.add(createEvent(rs));
+            }
+
+            return events;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error trying to find events associated with the username");
+        }
+    }
+
+    private Event createEvent(ResultSet rs) throws SQLException {
+        try {
+            Event event = new Event(rs.getString("eventID"), rs.getString("associatedUsername"),
+                    rs.getString("personID"), rs.getFloat("latitude"), rs.getFloat("longitude"),
+                    rs.getString("country"), rs.getString("city"), rs.getString("eventType"),
+                    rs.getInt("year"));
+
+            return event;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error creating event");
         }
     }
 }

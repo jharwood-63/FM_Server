@@ -1,7 +1,17 @@
 package services;
 
+import dao.DataAccessException;
+import dao.DatabaseManager;
+import dao.authTokenDAO;
+import dao.eventDAO;
+import model.AuthToken;
+import model.Event;
 import services.requests.EventRequest;
 import services.response.EventResponse;
+import services.response.Response;
+
+import java.sql.Connection;
+import java.util.Set;
 
 /**
  * EventService class receives an EventRequest from the EventHandler
@@ -10,13 +20,64 @@ import services.response.EventResponse;
 
 public class EventService {
     /**
-     * Receives an EventRequest, performs the operation, and returns the EventResponse
+     * Returns the single Event object with the specified ID (if the event is associated with the current user).
+     * The current user is determined by the provided authtoken.
+     * Returns ALL events for ALL family members of the current user.
+     * The current user is determined from the provided auth token.
      * @param eventRequest Specifies a specific EventID or asks for all events
      * @return EventResponse
      */
 
-    public EventResponse event(EventRequest eventRequest) {
+    public Response event(EventRequest eventRequest) {
+        DatabaseManager manager = new DatabaseManager();
 
-        return null;
+        try {
+            Connection conn = manager.getConnection();
+            eventDAO eventDAO = new eventDAO(conn);
+            authTokenDAO authTokenDAO = new authTokenDAO(conn);
+            Utility utility = new Utility();
+
+            AuthToken authToken = authTokenDAO.find(eventRequest.getAuthtoken());
+            if (authToken != null) {
+                String authTokenUsername = authToken.getUsername();
+                String eventID = eventRequest.getEventID();
+
+                if (eventID != null) {
+                    Event event = eventDAO.findEvent(eventID);
+
+                    if (event != null) {
+                        if (utility.isAssociated(event.getAssociatedUsername(), authTokenUsername)) {
+                            manager.closeConnection(true);
+                            return new EventResponse(event, true);
+                        }
+                        else {
+                            manager.closeConnection(false);
+                            return new Response("Event requested is not associated with the requesting user", false);
+                        }
+                    }
+                    else {
+                        manager.closeConnection(false);
+                        return new Response("Unable to find specified event in database", false);
+                    }
+                }
+                else {
+                    Set<Event> events = eventDAO.findAll(authTokenUsername);
+                    Event[] eventArray = new Event[events.size()];
+                    events.toArray(eventArray);
+
+                    manager.closeConnection(true);
+                    return new EventResponse(eventArray, true);
+                }
+            }
+            else {
+                manager.closeConnection(false);
+                return new Response("Invalid authtoken provided", false);
+            }
+        }
+        catch (DataAccessException e) {
+            e.printStackTrace();
+            manager.closeConnection(false);
+            return new Response("Error: unable to complete request", false);
+        }
     }
 }

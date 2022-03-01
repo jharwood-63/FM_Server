@@ -27,4 +27,13 @@ public class Utility {
         eventDAO.clearEvent();
         authTokenDAO.clearAuthToken();
     }
+
+    public boolean isAssociated(String objectUsername, String authTokenUsername) {
+        if (authTokenUsername.equals(objectUsername)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

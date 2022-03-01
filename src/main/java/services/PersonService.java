@@ -33,6 +33,7 @@ public class PersonService {
             Connection conn = manager.getConnection();
             personDAO personDAO = new personDAO(conn);
             authTokenDAO authTokenDAO = new authTokenDAO(conn);
+            Utility utility = new Utility();
 
             AuthToken authToken = authTokenDAO.find(personRequest.getAuthtoken());
             if (authToken != null) {
@@ -43,18 +44,21 @@ public class PersonService {
                     Person person = personDAO.find(personID);
 
                     if (person != null) {
-                        if (isAssociated(person.getAssociatedUsername(), authTokenUsername)) {
+                        if (utility.isAssociated(person.getAssociatedUsername(), authTokenUsername)) {
                             manager.closeConnection(true);
                             return new PersonResponse(person, true);
-                        } else {
+                        }
+                        else {
                             manager.closeConnection(false);
                             return new Response("Person requested is not associated with the requesting user", false);
                         }
-                    } else {
+                    }
+                    else {
                         manager.closeConnection(false);
                         return new Response("Unable to find specified person in database", false);
                     }
-                } else {
+                }
+                else {
                     Set<Person> persons = personDAO.findAll(authTokenUsername);
                     Person[] personArray = new Person[persons.size()];
                     persons.toArray(personArray);
@@ -72,15 +76,6 @@ public class PersonService {
             e.printStackTrace();
             manager.closeConnection(false);
             return new Response("Error: unable to complete request", false);
-        }
-    }
-
-    private boolean isAssociated(String personUsername, String authTokenUsername) {
-        if (authTokenUsername.equals(personUsername)) {
-            return true;
-        }
-        else {
-            return false;
         }
     }
 }
