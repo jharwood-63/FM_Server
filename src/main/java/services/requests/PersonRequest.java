@@ -24,4 +24,12 @@ public class PersonRequest {
     public String getPersonID() {
         return personID;
     }
+
+    public String getAuthtoken() {
+        return authtoken;
+    }
+
+    public void setAuthtoken(String authtoken) {
+        this.authtoken = authtoken;
+    }
 }

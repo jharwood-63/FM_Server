@@ -21,27 +21,20 @@ public class PersonResponse extends Response {
 
     /**
      * Response constructor for a specific person request
-     * @param associatedUsername Username of user to which this person belongs
-     * @param personID Unique identifier for this person
-     * @param firstName Person's first name
-     * @param lastName Person's last name
-     * @param gender Person's gender ("m" or "f")
-     * @param fatherID Person ID of person's father (OPTIONAL)
-     * @param motherID Person ID of person's mother (OPTIONAL)
-     * @param spouseID Person ID of person's spouse (OPTIONAL)
+     * @param person person object found in the query
      * @param success Status of operation
      */
 
-    public PersonResponse(String associatedUsername, String personID, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID, boolean success) {
+    public PersonResponse(Person person, boolean success) {
         super(success);
-        this.associatedUsername = associatedUsername;
-        this.personID = personID;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.fatherID = fatherID;
-        this.motherID = motherID;
-        this.spouseID = spouseID;
+        this.associatedUsername = person.getAssociatedUsername();
+        this.personID = person.getPersonID();
+        this.firstName = person.getFirstName();
+        this.lastName = person.getLastName();
+        this.gender = person.getGender();
+        this.fatherID = person.getPersonID();
+        this.motherID = person.getMotherID();
+        this.spouseID = person.getSpouseID();
     }
 
     /**

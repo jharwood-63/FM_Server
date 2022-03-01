@@ -123,8 +123,7 @@ public class personDAO {
         }
     }
 
-    //FIXME: NOT SURE IF IM GONNA NEED THIS BUT ILL KEEP IT FOR NOW
-    private Set<Person> findSet(String username) throws DataAccessException {
+    public Set<Person> findAll(String username) throws DataAccessException {
         Set<Person> persons = new HashSet<>();
         ResultSet rs;
         String sql = "SELECT * FROM person WHERE associatedUsername = ?;";
