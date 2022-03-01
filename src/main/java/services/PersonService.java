@@ -60,7 +60,8 @@ public class PersonService {
                 }
                 else {
                     Set<Person> persons = personDAO.findAll(authTokenUsername);
-                    Person[] personArray = loadArray(persons);
+                    Person[] personArray = new Person[persons.size()];
+                    persons.toArray(personArray);
 
                     manager.closeConnection(true);
                     return new PersonResult(personArray, true);
@@ -77,7 +78,7 @@ public class PersonService {
             return new Result("Error: unable to complete request", false);
         }
     }
-
+    /*
     private Person[] loadArray(Set<Person> persons) {
         Person[] personArray = new Person[persons.size()];
 
@@ -89,4 +90,5 @@ public class PersonService {
 
         return personArray;
     }
+     */
 }

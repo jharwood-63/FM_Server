@@ -32,6 +32,8 @@ public class LoadService {
 
                 utility.clear(conn);
 
+                setIDsToNull(loadRequest.getPersons());
+
                 loadUsers(loadRequest.getUsers(), conn);
                 loadPersons(loadRequest.getPersons(), conn);
                 loadEvents(loadRequest.getEvents(), conn);
@@ -55,24 +57,24 @@ public class LoadService {
     private void loadUsers(User [] users, Connection conn) throws DataAccessException {
         userDAO userDAO = new userDAO(conn);
 
-        for (int i = 0; i < users.length; i++) {
-            userDAO.insertUser(users[i]);
+        for (User user : users) {
+            userDAO.insertUser(user);
         }
     }
 
     private void loadPersons(Person[] persons, Connection conn) throws DataAccessException {
         personDAO personDAO = new personDAO(conn);
 
-        for (int i = 0; i < persons.length; i++) {
-            personDAO.insertPerson(persons[i]);
+        for (Person person : persons) {
+            personDAO.insertPerson(person);
         }
     }
 
     private void loadEvents(Event[] events, Connection conn) throws DataAccessException {
         eventDAO eventDAO = new eventDAO(conn);
 
-        for (int i = 0; i < events.length; i++) {
-            eventDAO.insertEvent(events[i]);
+        for (Event event : events) {
+            eventDAO.insertEvent(event);
         }
     }
 
@@ -92,5 +94,21 @@ public class LoadService {
         }
 
         return true;
+    }
+
+    private void setIDsToNull(Person[] persons) {
+        for (Person person : persons) {
+            if (person.getFatherID().equals("")) {
+                person.setFatherID(null);
+            }
+
+            if (person.getMotherID().equals("")) {
+                person.setMotherID(null);
+            }
+
+            if (person.getSpouseID().equals("")) {
+                person.setSpouseID(null);
+            }
+        }
     }
 }
