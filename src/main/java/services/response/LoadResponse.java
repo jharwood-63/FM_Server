@@ -14,7 +14,8 @@ public class LoadResponse extends Response {
      * @param numEvents Number of events added
      */
 
-    public LoadResponse(boolean success, int numUsers, int numPersons, int numEvents) {
-        super("PLACEHOLDER", success);
+    public LoadResponse(int numUsers, int numPersons, int numEvents, boolean success) {
+        super("Successfully added " + numUsers + " users, " + numPersons + " persons, and " + numEvents +
+                " events to the database.", success);
     }
 }

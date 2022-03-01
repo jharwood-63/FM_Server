@@ -1,7 +1,6 @@
 package services;
 
-import dao.DataAccessException;
-import dao.DatabaseManager;
+import dao.*;
 import model.Event;
 import model.Person;
 import model.User;
@@ -27,33 +26,71 @@ public class LoadService {
         DatabaseManager manager = new DatabaseManager();
 
         try {
-            Connection conn = manager.getConnection();
-            Utility utility = new Utility();
+            if (hasAllValues(loadRequest)) {
+                Connection conn = manager.getConnection();
+                Utility utility = new Utility();
 
-            //clear everything from the database
-            utility.clear(conn);
-            //run through the request object and add everything to the database
+                utility.clear(conn);
 
-            //create and return response object
+                loadUsers(loadRequest.getUsers(), conn);
+                loadPersons(loadRequest.getPersons(), conn);
+                loadEvents(loadRequest.getEvents(), conn);
+
+                manager.closeConnection(true);
+                return new LoadResponse(loadRequest.getUsers().length, loadRequest.getPersons().length,
+                        loadRequest.getEvents().length, true);
+            }
+            else {
+                manager.closeConnection(false);
+                return new Response("Error: invalid request, load not completed", false);
+            }
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             manager.closeConnection(false);
             return new Response("Error: Load not completed", false);
         }
-
-        return null;
     }
 
-    private void loadUsers(User [] users) {
+    private void loadUsers(User [] users, Connection conn) throws DataAccessException {
+        userDAO userDAO = new userDAO(conn);
 
+        for (int i = 0; i < users.length; i++) {
+            userDAO.insertUser(users[i]);
+        }
     }
 
-    private void loadPersons(Person[] persons) {
+    private void loadPersons(Person[] persons, Connection conn) throws DataAccessException {
+        personDAO personDAO = new personDAO(conn);
 
+        for (int i = 0; i < persons.length; i++) {
+            personDAO.insertPerson(persons[i]);
+        }
     }
 
-    private void loadEvents(Event[] events) {
+    private void loadEvents(Event[] events, Connection conn) throws DataAccessException {
+        eventDAO eventDAO = new eventDAO(conn);
 
+        for (int i = 0; i < events.length; i++) {
+            eventDAO.insertEvent(events[i]);
+        }
+    }
+
+    private boolean hasAllValues(LoadRequest loadRequest) {
+        User[] users = loadRequest.getUsers();
+        Person[] persons = loadRequest.getPersons();
+        Event[] events = loadRequest.getEvents();
+
+        if (users.length == 0) {
+            return false;
+        }
+        else if (persons.length == 0) {
+            return false;
+        }
+        else if (events.length == 0) {
+            return false;
+        }
+
+        return true;
     }
 }
