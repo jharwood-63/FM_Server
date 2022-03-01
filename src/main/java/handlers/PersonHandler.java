@@ -4,13 +4,13 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import services.PersonService;
 import services.Utility;
 import services.requests.PersonRequest;
+import services.response.Response;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 
 public class PersonHandler implements HttpHandler {
@@ -26,10 +26,29 @@ public class PersonHandler implements HttpHandler {
                     String authToken = reqHeaders.getFirst("Authorization");
                     String urlInfo = exchange.getRequestURI().toString();
                     String[] info = urlInfo.split("/", 3);
+
+                    PersonRequest personRequest;
                     if (info.length == 3) {
-                        PersonRequest personRequest = new PersonRequest(info[2], authToken);
+                        personRequest = new PersonRequest(info[2], authToken);
+                    }
+                    else {
+                        personRequest = new PersonRequest(authToken);
                     }
 
+                    PersonService personService = new PersonService();
+                    Response response = personService.person(personRequest);
+
+                    if (response.isSuccess()) {
+                        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                    }
+                    else {
+                        exchange.sendResponseHeaders(HttpURLConnection.HTTP_INTERNAL_ERROR, 0);
+                    }
+
+                    OutputStream respBody = exchange.getResponseBody();
+                    String jsonResult = gson.toJson(response);
+                    utility.writeString(jsonResult, respBody);
+                    respBody.close();
                 }
             }
             else {
@@ -37,6 +56,10 @@ public class PersonHandler implements HttpHandler {
                 OutputStream respBody = exchange.getResponseBody();
                 respBody.close();
             }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            throw new IOException("Error encountered trying to find a person in the database");
         }
     }
 }
