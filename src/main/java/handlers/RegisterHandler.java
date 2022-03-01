@@ -6,7 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 import services.RegisterService;
 import services.Utility;
 import services.requests.RegisterRequest;
-import services.response.Response;
+import services.result.Result;
 import java.io.*;
 import java.net.HttpURLConnection;
 
@@ -22,7 +22,7 @@ public class RegisterHandler implements HttpHandler {
                 RegisterRequest registerRequest = (RegisterRequest) gson.fromJson(reqBody, RegisterRequest.class);
 
                 RegisterService registerService = new RegisterService();
-                Response response = registerService.register(registerRequest);
+                Result response = registerService.register(registerRequest);
 
                 if (response.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

@@ -6,7 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 import services.LoadService;
 import services.Utility;
 import services.requests.LoadRequest;
-import services.response.Response;
+import services.result.Result;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,7 +26,7 @@ public class LoadHandler implements HttpHandler {
                 LoadRequest loadRequest = (LoadRequest) gson.fromJson(reqBody, LoadRequest.class);
 
                 LoadService loadService = new LoadService();
-                Response response = loadService.load(loadRequest);
+                Result response = loadService.load(loadRequest);
 
                 if (response.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

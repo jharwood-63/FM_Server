@@ -5,12 +5,10 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import services.ClearService;
 import services.Utility;
-import services.response.Response;
+import services.result.Result;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 
 public class ClearHandler implements HttpHandler {
@@ -22,7 +20,7 @@ public class ClearHandler implements HttpHandler {
             if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
                 Utility utility = new Utility();
                 ClearService clearService = new ClearService();
-                Response response = clearService.clear();
+                Result response = clearService.clear();
 
                 if (response.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

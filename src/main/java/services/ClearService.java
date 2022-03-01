@@ -1,8 +1,8 @@
 package services;
 
 import dao.*;
-import services.response.ClearResponse;
-import services.response.Response;
+import services.result.ClearResult;
+import services.result.Result;
 
 import java.sql.Connection;
 
@@ -16,7 +16,7 @@ public class ClearService {
      * @return ClearResponse object
      */
 
-    public Response clear() {
+    public Result clear() {
         DatabaseManager manager = new DatabaseManager();
 
         try {
@@ -26,12 +26,12 @@ public class ClearService {
             utility.clear(conn);
 
             manager.closeConnection(true);
-            return new ClearResponse("Clear succeeded.", true);
+            return new ClearResult("Clear succeeded.", true);
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             manager.closeConnection(false);
-            return new Response("Error: Unable to clear the database", false);
+            return new Result("Error: Unable to clear the database", false);
         }
     }
 }

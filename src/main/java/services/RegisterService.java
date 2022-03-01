@@ -3,8 +3,8 @@ package services;
 import dao.*;
 import model.*;
 import services.requests.RegisterRequest;
-import services.response.RegisterResponse;
-import services.response.Response;
+import services.result.RegisterResult;
+import services.result.Result;
 
 import java.sql.Connection;
 import java.util.Random;
@@ -31,7 +31,7 @@ public class RegisterService {
      * @return Response, an object containing the authtoken
      */
 
-    public Response register(RegisterRequest registerRequest) {
+    public Result register(RegisterRequest registerRequest) {
         DatabaseManager manager = new DatabaseManager();
 
         try {
@@ -57,21 +57,21 @@ public class RegisterService {
 
                     //close the connection after dao operations are done
                     manager.closeConnection(true);
-                    return new RegisterResponse(authTokenString, user.getUsername(), user.getPersonID(), true);
+                    return new RegisterResult(authTokenString, user.getUsername(), user.getPersonID(), true);
                 } else {
                     manager.closeConnection(false);
-                    return new Response("Error: username already in use", false);
+                    return new Result("Error: username already in use", false);
                 }
             }
             else {
                 manager.closeConnection(false);
-                return new Response("Error: incorrect or incomplete request", false);
+                return new Result("Error: incorrect or incomplete request", false);
             }
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             manager.closeConnection(false);
-            return new Response("Error: User was not registered", false);
+            return new Result("Error: User was not registered", false);
         }
     }
 

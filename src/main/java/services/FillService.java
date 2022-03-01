@@ -6,8 +6,8 @@ import model.FamilyTree;
 import model.Person;
 import model.User;
 import services.requests.FillRequest;
-import services.response.FillResponse;
-import services.response.Response;
+import services.result.FillResult;
+import services.result.Result;
 
 import java.sql.Connection;
 import java.util.Random;
@@ -30,7 +30,7 @@ public class FillService {
      * @return FillResponse object
      */
 
-    public Response fill(FillRequest fillRequest) {
+    public Result fill(FillRequest fillRequest) {
         DatabaseManager manager = new DatabaseManager();
 
         try {
@@ -48,21 +48,21 @@ public class FillService {
                     int numEvents = calcNumEvents(numPeople);
 
                     manager.closeConnection(true);
-                    return new FillResponse(numPeople, numEvents, true);
+                    return new FillResult(numPeople, numEvents, true);
                 } else {
                     manager.closeConnection(false);
-                    return new Response("Error: user does not exist", false);
+                    return new Result("Error: user does not exist", false);
                 }
             }
             else {
                 manager.closeConnection(false);
-                return new Response("Error: invalid number of generations", false);
+                return new Result("Error: invalid number of generations", false);
             }
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             manager.closeConnection(false);
-            return new Response("Error: unable to process fill request", false);
+            return new Result("Error: unable to process fill request", false);
         }
     }
 

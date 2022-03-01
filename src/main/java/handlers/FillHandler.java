@@ -6,7 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 import services.FillService;
 import services.Utility;
 import services.requests.FillRequest;
-import services.response.Response;
+import services.result.Result;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -40,7 +40,7 @@ public class FillHandler implements HttpHandler {
                 FillRequest fillRequest = new FillRequest(username, generations);
 
                 FillService fillService = new FillService();
-                Response response = fillService.fill(fillRequest);
+                Result response = fillService.fill(fillRequest);
 
                 if (response.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

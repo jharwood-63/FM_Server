@@ -7,8 +7,8 @@ import dao.eventDAO;
 import model.AuthToken;
 import model.Event;
 import services.requests.EventRequest;
-import services.response.EventResponse;
-import services.response.Response;
+import services.result.EventResult;
+import services.result.Result;
 
 import java.sql.Connection;
 import java.util.Set;
@@ -28,7 +28,7 @@ public class EventService {
      * @return EventResponse
      */
 
-    public Response event(EventRequest eventRequest) {
+    public Result event(EventRequest eventRequest) {
         DatabaseManager manager = new DatabaseManager();
 
         try {
@@ -48,16 +48,16 @@ public class EventService {
                     if (event != null) {
                         if (utility.isAssociated(event.getAssociatedUsername(), authTokenUsername)) {
                             manager.closeConnection(true);
-                            return new EventResponse(event, true);
+                            return new EventResult(event, true);
                         }
                         else {
                             manager.closeConnection(false);
-                            return new Response("Event requested is not associated with the requesting user", false);
+                            return new Result("Event requested is not associated with the requesting user", false);
                         }
                     }
                     else {
                         manager.closeConnection(false);
-                        return new Response("Unable to find specified event in database", false);
+                        return new Result("Unable to find specified event in database", false);
                     }
                 }
                 else {
@@ -66,18 +66,18 @@ public class EventService {
                     events.toArray(eventArray);
 
                     manager.closeConnection(true);
-                    return new EventResponse(eventArray, true);
+                    return new EventResult(eventArray, true);
                 }
             }
             else {
                 manager.closeConnection(false);
-                return new Response("Invalid authtoken provided", false);
+                return new Result("Invalid authtoken provided", false);
             }
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             manager.closeConnection(false);
-            return new Response("Error: unable to complete request", false);
+            return new Result("Error: unable to complete request", false);
         }
     }
 }

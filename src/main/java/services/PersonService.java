@@ -7,8 +7,8 @@ import dao.personDAO;
 import model.AuthToken;
 import model.Person;
 import services.requests.PersonRequest;
-import services.response.PersonResponse;
-import services.response.Response;
+import services.result.PersonResult;
+import services.result.Result;
 
 import java.sql.Connection;
 import java.util.Set;
@@ -26,7 +26,7 @@ public class PersonService {
      * @return PersonResponse object
      */
 
-    public Response person(PersonRequest personRequest) {
+    public Result person(PersonRequest personRequest) {
         DatabaseManager manager = new DatabaseManager();
 
         try {
@@ -46,16 +46,16 @@ public class PersonService {
                     if (person != null) {
                         if (utility.isAssociated(person.getAssociatedUsername(), authTokenUsername)) {
                             manager.closeConnection(true);
-                            return new PersonResponse(person, true);
+                            return new PersonResult(person, true);
                         }
                         else {
                             manager.closeConnection(false);
-                            return new Response("Person requested is not associated with the requesting user", false);
+                            return new Result("Person requested is not associated with the requesting user", false);
                         }
                     }
                     else {
                         manager.closeConnection(false);
-                        return new Response("Unable to find specified person in database", false);
+                        return new Result("Unable to find specified person in database", false);
                     }
                 }
                 else {
@@ -64,18 +64,18 @@ public class PersonService {
                     persons.toArray(personArray);
 
                     manager.closeConnection(true);
-                    return new PersonResponse(personArray, true);
+                    return new PersonResult(personArray, true);
                 }
             }
             else {
                 manager.closeConnection(false);
-                return new Response("Invalid authtoken provided", false);
+                return new Result("Invalid authtoken provided", false);
             }
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             manager.closeConnection(false);
-            return new Response("Error: unable to complete request", false);
+            return new Result("Error: unable to complete request", false);
         }
     }
 }

@@ -8,7 +8,7 @@ package model;
  */
 
 public class AuthToken {
-    private String authToken;
+    private String authtoken;
     private String username;
 
     /**
@@ -18,7 +18,7 @@ public class AuthToken {
      */
 
     public AuthToken(String authToken, String username) {
-        this.authToken = authToken;
+        this.authtoken = authToken;
         this.username = username;
     }
 
@@ -38,7 +38,7 @@ public class AuthToken {
 
         AuthToken compAuthToken = (AuthToken)o;
 
-        if (!compAuthToken.getAuthToken().equals(this.authToken) || !compAuthToken.getUsername().equals(this.username)) {
+        if (!compAuthToken.getAuthToken().equals(this.authtoken) || !compAuthToken.getUsername().equals(this.username)) {
             return false;
         }
 
@@ -46,11 +46,11 @@ public class AuthToken {
     }
 
     public String getAuthToken() {
-        return authToken;
+        return authtoken;
     }
 
     public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+        this.authtoken = authToken;
     }
 
     public String getUsername() {

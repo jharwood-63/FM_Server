@@ -7,9 +7,8 @@ import dao.userDAO;
 import model.AuthToken;
 import model.User;
 import services.requests.LoginRequest;
-import services.requests.RegisterRequest;
-import services.response.LoginResponse;
-import services.response.Response;
+import services.result.LoginResult;
+import services.result.Result;
 
 import java.sql.Connection;
 import java.util.UUID;
@@ -26,7 +25,7 @@ public class LoginService {
      * @return LoginResponse object
      */
 
-    public Response login(LoginRequest loginRequest) {
+    public Result login(LoginRequest loginRequest) {
         DatabaseManager manager = new DatabaseManager();
 
         try {
@@ -42,25 +41,25 @@ public class LoginService {
                         authTokenDAO.insertAuthToken(authToken);
 
                         manager.closeConnection(true);
-                        return new LoginResponse(authtoken, authToken.getUsername(), user.getPersonID(), true);
+                        return new LoginResult(authtoken, authToken.getUsername(), user.getPersonID(), true);
                     } else {
                         manager.closeConnection(false);
-                        return new Response("Error: username or password is incorrect", false);
+                        return new Result("Error: username or password is incorrect", false);
                     }
                 } else {
                     manager.closeConnection(false);
-                    return new Response("Error: username or password is incorrect", false);
+                    return new Result("Error: username or password is incorrect", false);
                 }
             }
             else {
                 manager.closeConnection(false);
-                return new Response("Error: incorrect or incomplete request", false);
+                return new Result("Error: incorrect or incomplete request", false);
             }
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             manager.closeConnection(false);
-            return new Response("Error: Unable to login user", false);
+            return new Result("Error: Unable to login user", false);
         }
     }
 

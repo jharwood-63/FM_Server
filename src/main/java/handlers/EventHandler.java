@@ -7,7 +7,7 @@ import com.sun.net.httpserver.HttpHandler;
 import services.EventService;
 import services.Utility;
 import services.requests.EventRequest;
-import services.response.Response;
+import services.result.Result;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,7 +36,7 @@ public class EventHandler implements HttpHandler {
                     }
 
                     EventService eventService = new EventService();
-                    Response response = eventService.event(eventRequest);
+                    Result response = eventService.event(eventRequest);
 
                     if (response.isSuccess()) {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -51,7 +51,7 @@ public class EventHandler implements HttpHandler {
                     respBody.close();
                 }
                 else {
-                    Response response = new Response("Authorization key missing", false);
+                    Result response = new Result("Authorization key missing", false);
 
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                     OutputStream respBody = exchange.getResponseBody();

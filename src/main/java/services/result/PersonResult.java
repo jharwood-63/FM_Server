@@ -1,4 +1,4 @@
-package services.response;
+package services.result;
 
 import model.Person;
 
@@ -7,7 +7,7 @@ import model.Person;
  * This is a response for both a single person request and an all persons request
  */
 
-public class PersonResponse extends Response {
+public class PersonResult extends Result {
     private Person [] data;
 
     private String associatedUsername;
@@ -25,7 +25,7 @@ public class PersonResponse extends Response {
      * @param success Status of operation
      */
 
-    public PersonResponse(Person person, boolean success) {
+    public PersonResult(Person person, boolean success) {
         super(success);
         this.associatedUsername = person.getAssociatedUsername();
         this.personID = person.getPersonID();
@@ -43,7 +43,7 @@ public class PersonResponse extends Response {
      * @param success Status of operation
      */
 
-    public PersonResponse(Person [] data, boolean success) {
+    public PersonResult(Person [] data, boolean success) {
         super(success);
         this.data = data;
     }

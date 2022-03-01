@@ -6,7 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 import services.LoginService;
 import services.Utility;
 import services.requests.LoginRequest;
-import services.response.Response;
+import services.result.Result;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -24,7 +24,7 @@ public class LoginHandler implements HttpHandler {
                 LoginRequest loginRequest = (LoginRequest) gson.fromJson(reqBody, LoginRequest.class);
 
                 LoginService loginService = new LoginService();
-                Response response = loginService.login(loginRequest);
+                Result response = loginService.login(loginRequest);
 
                 if (response.isSuccess()) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

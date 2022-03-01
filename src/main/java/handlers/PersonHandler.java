@@ -7,7 +7,7 @@ import com.sun.net.httpserver.HttpHandler;
 import services.PersonService;
 import services.Utility;
 import services.requests.PersonRequest;
-import services.response.Response;
+import services.result.Result;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,7 +36,7 @@ public class PersonHandler implements HttpHandler {
                     }
 
                     PersonService personService = new PersonService();
-                    Response response = personService.person(personRequest);
+                    Result response = personService.person(personRequest);
 
                     if (response.isSuccess()) {
                         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -51,7 +51,7 @@ public class PersonHandler implements HttpHandler {
                     respBody.close();
                 }
                 else {
-                    Response response = new Response("Authorization key missing", false);
+                    Result response = new Result("Authorization key missing", false);
 
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                     OutputStream respBody = exchange.getResponseBody();

@@ -5,8 +5,8 @@ import model.Event;
 import model.Person;
 import model.User;
 import services.requests.LoadRequest;
-import services.response.LoadResponse;
-import services.response.Response;
+import services.result.LoadResult;
+import services.result.Result;
 
 import java.sql.Connection;
 
@@ -22,7 +22,7 @@ public class LoadService {
      * @return LoadResponse object
      */
 
-    public Response load(LoadRequest loadRequest) {
+    public Result load(LoadRequest loadRequest) {
         DatabaseManager manager = new DatabaseManager();
 
         try {
@@ -37,18 +37,18 @@ public class LoadService {
                 loadEvents(loadRequest.getEvents(), conn);
 
                 manager.closeConnection(true);
-                return new LoadResponse(loadRequest.getUsers().length, loadRequest.getPersons().length,
+                return new LoadResult(loadRequest.getUsers().length, loadRequest.getPersons().length,
                         loadRequest.getEvents().length, true);
             }
             else {
                 manager.closeConnection(false);
-                return new Response("Error: invalid request, load not completed", false);
+                return new Result("Error: invalid request, load not completed", false);
             }
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             manager.closeConnection(false);
-            return new Response("Error: Load not completed", false);
+            return new Result("Error: Load not completed", false);
         }
     }
 

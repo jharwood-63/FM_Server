@@ -1,13 +1,12 @@
-package services.response;
+package services.result;
 
 import model.Event;
-import model.FamilyTree;
 
 /**
  * EventResponse holds the message and success status
  */
 
-public class EventResponse extends Response {
+public class EventResult extends Result {
     private String associatedUsername;
     private String eventID;
     private String personID;
@@ -25,7 +24,7 @@ public class EventResponse extends Response {
      * @param responseEvent The event that was found in the operation
      */
 
-    public EventResponse(Event responseEvent, boolean success) {
+    public EventResult(Event responseEvent, boolean success) {
         super(success);
         this.associatedUsername = responseEvent.getAssociatedUsername();
         this.eventID = responseEvent.getEventID();
@@ -43,7 +42,7 @@ public class EventResponse extends Response {
      * @param responseEvents Array of events that were found in the database
      */
 
-    public EventResponse(Event [] responseEvents, boolean success) {
+    public EventResult(Event [] responseEvents, boolean success) {
         super(success);
         this.data = responseEvents;
     }

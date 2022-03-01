@@ -1,11 +1,11 @@
-package services.response;
+package services.result;
 
 /**
  * RegisterResponse holds the data and success status returned after a register is performed
  */
 
-public class RegisterResponse extends Response {
-    private String authToken;
+public class RegisterResult extends Result {
+    private String authtoken;
     private String username;
     private String personID;
 
@@ -16,20 +16,20 @@ public class RegisterResponse extends Response {
      * @param personID Unique person ID assigend to this user's generated person
      */
 
-    public RegisterResponse(String authToken, String username, String personID, boolean success) {
+    public RegisterResult(String authToken, String username, String personID, boolean success) {
         super(success);
 
-        this.authToken = authToken;
+        this.authtoken = authToken;
         this.username = username;
         this.personID = personID;
     }
 
     public String getAuthToken() {
-        return authToken;
+        return authtoken;
     }
 
     public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+        this.authtoken = authToken;
     }
 
     public String getUsername() {

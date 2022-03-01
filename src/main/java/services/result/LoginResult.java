@@ -1,10 +1,10 @@
-package services.response;
+package services.result;
 
 /**
  * LoginResponse holds the data and success status returned after a login is performed
  */
 
-public class LoginResponse extends Response {
+public class LoginResult extends Result {
     private String authtoken;
     private String username;
     private String personID;
@@ -17,7 +17,7 @@ public class LoginResponse extends Response {
      * @param success Status of the operation
      */
 
-    public LoginResponse(String authtoken, String username, String personID, boolean success) {
+    public LoginResult(String authtoken, String username, String personID, boolean success) {
         super(success);
         this.authtoken = authtoken;
         this.username = username;
