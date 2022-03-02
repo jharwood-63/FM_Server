@@ -3,10 +3,6 @@ package model;
 public class LocationData {
     Location[] data;
 
-    public LocationData() {
-
-    }
-
     public LocationData(Location[] data) {
         this.data = data;
     }

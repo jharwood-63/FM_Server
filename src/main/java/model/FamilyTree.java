@@ -96,13 +96,6 @@ public class FamilyTree {
         event.setPersonID(personID);
     }
 
-    /*
-    * YEARS
-    * birth of parents will be between 20 and 40 years before child
-    * marriage of parents will be between 1 and 20 years before birth of user
-    * max death year is 100 years after birth, must be after birth of child
-     */
-
     private Event createEvent(String eventType, int birthYear, Location marriageLocation, int marriageYear) {
         Random randIndex = new Random();
         Location location = data.getLocationData().getData()[randIndex.nextInt(data.getLocationDataLength())];
@@ -110,15 +103,6 @@ public class FamilyTree {
         float latitude = Float.parseFloat(location.getLatitude());
         float longitude = Float.parseFloat(location.getLongitude());
         Event event;
-
-        /*
-        * EVENT TYPES
-        * Required:
-        * birth
-        * marriage
-        * death
-        * other
-         */
 
         if (eventType.equalsIgnoreCase(BIRTH_EVENT)) {
             event = new Event(eventID, "", "", latitude, longitude, location.getCountry(),

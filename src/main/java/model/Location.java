@@ -6,10 +6,6 @@ public class Location {
     String latitude;
     String longitude;
 
-    public Location() {
-
-    }
-
     public Location(String country, String city, String latitude, String longitude) {
         this.country = country;
         this.city = city;

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class Deserializer {
-    //change this so that you only need one deserialize function
     public LocationData deserializeLocation() throws IOException {
         Gson gson = new Gson();
         try (Reader reader = new FileReader("json/locations.json")){

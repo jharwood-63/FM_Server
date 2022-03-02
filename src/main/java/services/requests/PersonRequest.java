@@ -13,10 +13,6 @@ public class PersonRequest {
         this.authtoken = authtoken;
     }
 
-    /**
-     * Default constructor for requesting all persons connected to the current user
-     */
-
     public PersonRequest(String authtoken) {
         this.authtoken = authtoken;
     }

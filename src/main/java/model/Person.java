@@ -132,8 +132,7 @@ public class Person {
                     !compPerson.getGender().equals(this.gender)) {
                 return false;
             }
-        }
-        // none
+        } // none
         else {
             if (!compPerson.getPersonID().equals(this.personID) || !compPerson.getAssociatedUsername().equals(this.associatedUsername) ||
                     !compPerson.firstName.equals(this.firstName) || !compPerson.getLastName().equals(this.lastName) ||
