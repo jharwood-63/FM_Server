@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Set;
+
 /**
  * The Event class represents the data that is stored in the event table.
  * It contains an eventID, associateUsername, personID, latitude, longitude, country, city, eventType, and year
@@ -153,5 +155,15 @@ public class Event {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public boolean isInSet(Set<Event> events) {
+        for (Event testEvent : events) {
+            if (this.equals(testEvent)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

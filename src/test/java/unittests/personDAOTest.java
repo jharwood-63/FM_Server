@@ -148,7 +148,6 @@ public class personDAOTest {
     }
 
     @Test
-    @DisplayName("Positive find all test")
     public void findAllTest() throws DataAccessException {
         try {
             pDAO.insertPerson(personNormal);
@@ -156,13 +155,19 @@ public class personDAOTest {
 
             Set<Person> persons = pDAO.findAll(personNormal.getAssociatedUsername());
 
-            for (Person person : persons) {
-                assertTrue(person.isInSet(persons));
-            }
+            assertTrue(personNormal.isInSet(persons));
+            assertTrue(personNullIDs.isInSet(persons));
         }
         catch (DataAccessException e) {
             e.printStackTrace();
             throw new DataAccessException("Error accessing data in the database");
         }
+    }
+
+    @Test
+    public void negativeFindAllTest() throws DataAccessException {
+        Set<Person> persons = pDAO.findAll(personNormal.getAssociatedUsername());
+
+        assertTrue(persons.size() == 0);
     }
 }
