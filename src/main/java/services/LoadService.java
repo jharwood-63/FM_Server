@@ -26,8 +26,8 @@ public class LoadService {
         DatabaseManager manager = new DatabaseManager();
 
         try {
+            Connection conn = manager.getConnection();
             if (hasAllValues(loadRequest)) {
-                Connection conn = manager.getConnection();
                 Utility utility = new Utility();
 
                 utility.clear(conn);

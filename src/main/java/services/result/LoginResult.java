@@ -23,4 +23,16 @@ public class LoginResult extends Result {
         this.username = username;
         this.personID = personID;
     }
+
+    public String getAuthtoken() {
+        return authtoken;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPersonID() {
+        return personID;
+    }
 }

@@ -46,4 +46,44 @@ public class EventResult extends Result {
         super(success);
         this.data = responseEvents;
     }
+
+    public String getAssociatedUsername() {
+        return associatedUsername;
+    }
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public String getPersonID() {
+        return personID;
+    }
+
+    public Float getLatitude() {
+        return latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public Event[] getData() {
+        return data;
+    }
 }

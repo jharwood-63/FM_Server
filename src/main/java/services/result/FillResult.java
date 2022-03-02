@@ -5,6 +5,8 @@ package services.result;
  */
 
 public class FillResult extends Result {
+    private int numPersons;
+    private int numEvents;
 
     /**
      * FillResponse constructor for creating a response to a fill operation. The message is different based on the success status.
@@ -15,5 +17,15 @@ public class FillResult extends Result {
 
     public FillResult(int numPersons, int numEvents, boolean success) {
         super("Successfully added " + numPersons + " persons and " + numEvents + " events to the database", success);
+        this.numPersons = numPersons;
+        this.numEvents = numEvents;
+    }
+
+    public int getNumPersons() {
+        return numPersons;
+    }
+
+    public int getNumEvents() {
+        return numEvents;
     }
 }

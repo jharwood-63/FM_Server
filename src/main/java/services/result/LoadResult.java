@@ -5,6 +5,9 @@ package services.result;
  */
 
 public class LoadResult extends Result {
+    private int numUsers;
+    private int numPersons;
+    private int numEvents;
 
     /**
      * LoadResponse constructor creates a message and initializes the success status
@@ -17,5 +20,20 @@ public class LoadResult extends Result {
     public LoadResult(int numUsers, int numPersons, int numEvents, boolean success) {
         super("Successfully added " + numUsers + " users, " + numPersons + " persons, and " + numEvents +
                 " events to the database.", success);
+        this.numUsers = numUsers;
+        this.numPersons = numPersons;
+        this.numEvents = numEvents;
+    }
+
+    public int getNumUsers() {
+        return numUsers;
+    }
+
+    public int getNumPersons() {
+        return numPersons;
+    }
+
+    public int getNumEvents() {
+        return numEvents;
     }
 }

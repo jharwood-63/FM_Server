@@ -34,8 +34,8 @@ public class FillService {
         DatabaseManager manager = new DatabaseManager();
 
         try {
+            Connection conn = manager.getConnection();
             if (fillRequest.getNumGenerations() >= 0) {
-                Connection conn = manager.getConnection();
                 userDAO userDAO = new userDAO(conn);
                 User user = userDAO.find(fillRequest.getUsername());
 
