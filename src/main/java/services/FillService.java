@@ -32,9 +32,10 @@ public class FillService {
 
     public Result fill(FillRequest fillRequest) {
         DatabaseManager manager = new DatabaseManager();
+        Connection conn = null;
 
         try {
-            Connection conn = manager.getConnection();
+            conn = manager.getConnection();
             if (fillRequest.getNumGenerations() >= 0) {
                 userDAO userDAO = new userDAO(conn);
                 User user = userDAO.find(fillRequest.getUsername());
@@ -61,7 +62,9 @@ public class FillService {
         }
         catch (DataAccessException e) {
             e.printStackTrace();
-            manager.closeConnection(false);
+            if (conn != null) {
+                manager.closeConnection(false);
+            }
             return new Result("Error: unable to process fill request", false);
         }
     }

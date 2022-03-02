@@ -33,9 +33,10 @@ public class RegisterService {
 
     public Result register(RegisterRequest registerRequest) {
         DatabaseManager manager = new DatabaseManager();
+        Connection conn = null;
 
         try {
-            Connection conn = manager.getConnection();
+            conn = manager.getConnection();
             userDAO userDAO = new userDAO(conn);
             authTokenDAO authTokenDAO = new authTokenDAO(conn);
 
@@ -70,7 +71,9 @@ public class RegisterService {
         }
         catch (DataAccessException e) {
             e.printStackTrace();
-            manager.closeConnection(false);
+            if (conn != null) {
+                manager.closeConnection(false);
+            }
             return new Result("Error: User was not registered", false);
         }
     }

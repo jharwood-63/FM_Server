@@ -18,9 +18,10 @@ public class ClearService {
 
     public Result clear() {
         DatabaseManager manager = new DatabaseManager();
+        Connection conn = null;
 
         try {
-            Connection conn = manager.getConnection();
+            conn = manager.getConnection();
             Utility utility = new Utility();
 
             utility.clear(conn);
@@ -30,7 +31,9 @@ public class ClearService {
         }
         catch (DataAccessException e) {
             e.printStackTrace();
-            manager.closeConnection(false);
+            if (conn != null) {
+                manager.closeConnection(false);
+            }
             return new Result("Error: Unable to clear the database", false);
         }
     }

@@ -28,9 +28,10 @@ public class PersonService {
 
     public Result person(PersonRequest personRequest) {
         DatabaseManager manager = new DatabaseManager();
+        Connection conn = null;
 
         try {
-            Connection conn = manager.getConnection();
+            conn = manager.getConnection();
             personDAO personDAO = new personDAO(conn);
             authTokenDAO authTokenDAO = new authTokenDAO(conn);
             Utility utility = new Utility();
@@ -74,21 +75,10 @@ public class PersonService {
         }
         catch (DataAccessException e) {
             e.printStackTrace();
-            manager.closeConnection(false);
+            if (conn != null) {
+                manager.closeConnection(false);
+            }
             return new Result("Error: unable to complete request", false);
         }
     }
-    /*
-    private Person[] loadArray(Set<Person> persons) {
-        Person[] personArray = new Person[persons.size()];
-
-        int i = 0;
-        for (Person person : persons) {
-            personArray[i] = person;
-            i++;
-        }
-
-        return personArray;
-    }
-     */
 }

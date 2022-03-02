@@ -27,9 +27,10 @@ public class LoginService {
 
     public Result login(LoginRequest loginRequest) {
         DatabaseManager manager = new DatabaseManager();
+        Connection conn = null;
 
         try {
-            Connection conn = manager.getConnection();
+            conn = manager.getConnection();
             userDAO userDAO = new userDAO(conn);
             authTokenDAO authTokenDAO = new authTokenDAO(conn);
             if (hasAllValues(loginRequest)) {
@@ -58,7 +59,9 @@ public class LoginService {
         }
         catch (DataAccessException e) {
             e.printStackTrace();
-            manager.closeConnection(false);
+            if (conn != null) {
+                manager.closeConnection(false);
+            }
             return new Result("Error: Unable to login user", false);
         }
     }

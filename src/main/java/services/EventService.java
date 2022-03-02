@@ -30,9 +30,10 @@ public class EventService {
 
     public Result event(EventRequest eventRequest) {
         DatabaseManager manager = new DatabaseManager();
+        Connection conn = null;
 
         try {
-            Connection conn = manager.getConnection();
+            conn = manager.getConnection();
             eventDAO eventDAO = new eventDAO(conn);
             authTokenDAO authTokenDAO = new authTokenDAO(conn);
             Utility utility = new Utility();
@@ -76,7 +77,9 @@ public class EventService {
         }
         catch (DataAccessException e) {
             e.printStackTrace();
-            manager.closeConnection(false);
+            if (conn != null) {
+                manager.closeConnection(false);
+            }
             return new Result("Error: unable to complete request", false);
         }
     }

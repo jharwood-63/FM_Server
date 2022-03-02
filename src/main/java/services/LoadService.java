@@ -24,9 +24,10 @@ public class LoadService {
 
     public Result load(LoadRequest loadRequest) {
         DatabaseManager manager = new DatabaseManager();
+        Connection conn = null;
 
         try {
-            Connection conn = manager.getConnection();
+            conn = manager.getConnection();
             if (hasAllValues(loadRequest)) {
                 Utility utility = new Utility();
 
@@ -49,7 +50,9 @@ public class LoadService {
         }
         catch (DataAccessException e) {
             e.printStackTrace();
-            manager.closeConnection(false);
+            if (conn != null) {
+                manager.closeConnection(false);
+            }
             return new Result("Error: Load not completed", false);
         }
     }

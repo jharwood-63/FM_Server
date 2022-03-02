@@ -18,7 +18,6 @@ import services.result.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.Connection;
-import java.util.Set;
 
 public class ServiceTest {
     private User[] users;
@@ -54,8 +53,9 @@ public class ServiceTest {
         Result result = clearService.clear();
 
         DatabaseManager manager = new DatabaseManager();
+        Connection conn;
         try {
-            Connection conn = manager.getConnection();
+            conn = manager.getConnection();
             userDAO userDAO = new userDAO(conn);
 
             assertTrue(result.isSuccess());
@@ -73,7 +73,8 @@ public class ServiceTest {
     @Test
     public void positiveEventTest() {
         loadData();
-        String authTokenString = login(users[0]);
+        AuthToken authToken = login(users[0]);
+        String authTokenString = authToken.getAuthToken();
 
         EventRequest requestWithID = new EventRequest(events[0].getEventID(), authTokenString);
         EventRequest requestWithoutID = new EventRequest(authTokenString);
@@ -89,7 +90,8 @@ public class ServiceTest {
     @Test
     public void negativeEventTest() {
         loadData();
-        String authTokenString = login(users[1]);
+        AuthToken authToken = login(users[1]);
+        String authTokenString = authToken.getAuthToken();
 
         EventRequest requestInvalidUser = new EventRequest(events[0].getEventID(), authTokenString);
 
@@ -145,14 +147,136 @@ public class ServiceTest {
         assertFalse(result.isSuccess());
     }
 
-    private void registerUser() {
+    @Test
+    public void positiveRegisterTest() throws DataAccessException {
+        User registeredUser = registerUser();
+
+        DatabaseManager manager = new DatabaseManager();
+        Connection conn;
+        try {
+            conn = manager.getConnection();
+            userDAO userDAO = new userDAO(conn);
+
+            User foundUser = userDAO.find(user.getUsername());
+
+            manager.closeConnection(false);
+
+            assertEquals(registeredUser, foundUser);
+        }
+        catch (DataAccessException e) {
+            manager.closeConnection(false);
+            e.printStackTrace();
+            throw new DataAccessException("Error");
+        }
+    }
+
+    @Test
+    public void negativeRegisterTest() throws DataAccessException {
+        registerUser();
+
         RegisterRequest registerRequest = new RegisterRequest(user.getUsername(), user.getPassword(), user.getEmail(),
                 user.getFirstName(), user.getLastName(), user.getGender());
 
         RegisterService registerService = new RegisterService();
-        RegisterResult result = (RegisterResult) registerService.register(registerRequest);
+        Result registerResult = registerService.register(registerRequest);
 
-        //return result.getAuthToken();
+        assertFalse(registerResult.isSuccess());
+
+        DatabaseManager manager = new DatabaseManager();
+        Connection conn;
+        try {
+            conn = manager.getConnection();
+            userDAO userDAO = new userDAO(conn);
+
+            User foundUser = userDAO.find(users[1].getUsername());
+
+            manager.closeConnection(false);
+
+            assertNull(foundUser);
+        }
+        catch (DataAccessException e) {
+            manager.closeConnection(false);
+            e.printStackTrace();
+            throw new DataAccessException("Error");
+        }
+    }
+
+    @Test
+    public void positiveLoginTest() throws DataAccessException {
+        registerUser();
+        AuthToken authToken = login(user);
+
+        DatabaseManager manager = new DatabaseManager();
+        Connection conn;
+        try {
+            conn = manager.getConnection();
+            authTokenDAO authTokenDAO = new authTokenDAO(conn);
+
+            AuthToken foundAuthToken = authTokenDAO.find(authToken.getAuthToken());
+
+            manager.closeConnection(false);
+
+            assertEquals(foundAuthToken, authToken);
+        }
+        catch (DataAccessException e) {
+            manager.closeConnection(false);
+            e.printStackTrace();
+            throw new DataAccessException("error");
+        }
+    }
+
+    @Test
+    public void negativeLoginTest() {
+        LoginRequest loginRequest = new LoginRequest(user.getUsername(), user.getPassword());
+        LoginService loginService = new LoginService();
+
+        Result loginResult = loginService.login(loginRequest);
+
+        assertFalse(loginResult.isSuccess());
+    }
+
+    @Test
+    public void positivePersonTest() {
+        loadData();
+        AuthToken authToken = login(users[0]);
+        String authTokenString = authToken.getAuthToken();
+
+        PersonRequest requestWithID = new PersonRequest(persons[0].getPersonID(), authTokenString);
+        PersonRequest requestWithoutID = new PersonRequest(authTokenString);
+
+        PersonService personService = new PersonService();
+        Result idResult = personService.person(requestWithID);
+        Result noIDResult = personService.person(requestWithoutID);
+
+        assertTrue(idResult.isSuccess());
+        assertTrue(noIDResult.isSuccess());
+    }
+
+    @Test
+    public void negativePersonTest() {
+        loadData();
+        AuthToken authToken = login(users[1]);
+        String authTokenString = authToken.getAuthToken();
+
+        PersonRequest requestInvalidUser = new PersonRequest(persons[0].getPersonID(), authTokenString);
+
+        PersonService personService = new PersonService();
+        Result invalidResult = personService.person(requestInvalidUser);
+
+        assertFalse(invalidResult.isSuccess());
+    }
+
+    private User registerUser() {
+        RegisterRequest registerRequest = new RegisterRequest(user.getUsername(), user.getPassword(), user.getEmail(),
+                user.getFirstName(), user.getLastName(), user.getGender());
+
+        RegisterService registerService = new RegisterService();
+        RegisterResult registerResult = (RegisterResult) registerService.register(registerRequest);
+
+        User newUser = user;
+        newUser.setPersonID(registerResult.getPersonID());
+
+        return newUser;
     }
 
     private LoadResult loadData() {
@@ -162,12 +286,14 @@ public class ServiceTest {
         return (LoadResult) loadService.load(loadRequest);
     }
 
-    private String login(User testUser) {
+    private AuthToken login(User testUser) {
         LoginRequest loginRequest = new LoginRequest(testUser.getUsername(), testUser.getPassword());
         LoginService loginService = new LoginService();
 
         LoginResult loginResult = (LoginResult) loginService.login(loginRequest);
 
-        return loginResult.getAuthtoken();
+        AuthToken authToken = new AuthToken(loginResult.getAuthtoken(), loginResult.getUsername());
+
+        return authToken;
     }
 }
